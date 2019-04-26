@@ -7,6 +7,7 @@ plugins {
 val ktorVersion = "1.1.4"
 val jacksonVersion = "2.9.8"
 val logbackVersion = "1.2.3"
+val slf4jVersion = "1.7.26"
 
 group = "se.jensim.testinggrounds"
 version = "1.0-SNAPSHOT"
@@ -21,7 +22,9 @@ dependencies {
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
+    testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
 }
 
