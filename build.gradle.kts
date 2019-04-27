@@ -63,6 +63,10 @@ tasks.assemble {
     dependsOn(npmInstall2, npmBuild)
 }
 
+tasks.findByName("sonarqube")?.apply {
+    dependsOn(npmInstall2, npmBuild)
+}
+
 tasks.processResources {
     mustRunAfter(npmBuild)
 }
