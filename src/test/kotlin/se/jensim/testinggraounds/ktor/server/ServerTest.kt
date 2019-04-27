@@ -14,14 +14,7 @@ class ServerTest {
         withTestApplication(Application::mainModule) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(200, response.status()?.value)
-                assertEquals(
-                    """
-                    |{
-                    |  "url" : "HEJ"
-                    |}
-                    """.trimMargin(),
-                    response.content
-                )
+                assertEquals("Hello world\n", response.content)
             }
         }
     }
