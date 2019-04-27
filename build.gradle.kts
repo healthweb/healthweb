@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.3.31"
     id("com.moowork.node") version "1.3.1"
+    id("org.sonarqube") version "2.7"
     application
 }
 
