@@ -1,3 +1,5 @@
+@file:JvmName("Server")
+
 package se.jensim.testinggraounds.ktor.server
 
 import io.ktor.application.Application

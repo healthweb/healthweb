@@ -1,7 +1,10 @@
+import com.moowork.gradle.node.npm.NpmTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.3.31"
+    id("com.moowork.node") version "1.3.1"
+    application
 }
 
 val ktorVersion = "1.1.4"
@@ -28,6 +31,37 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
 }
 
+application {
+    mainClassName = "se.jensim.testinggraounds.ktor.server.Server"
+}
+
+node {
+    download = false
+}
+
+val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
+    group = "node"
+    description = "Install packages from package.json"
+    setWorkingDir(file("${project.projectDir}/src/frontend"))
+    setArgs(listOf("install"))
+}
+
+val npmBuild = tasks.create("npmBuild", NpmTask::class) {
+    group = "node"
+    description = "Build production release of the Frontend resources"
+    setWorkingDir(file("${project.projectDir}/src/frontend"))
+    setArgs(listOf("run", "build"))
+    mustRunAfter(npmInstall2)
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.build {
+    dependsOn(npmInstall2, npmBuild)
+}
+
+tasks.processResources {
+    mustRunAfter(npmBuild)
 }
