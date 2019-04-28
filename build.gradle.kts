@@ -45,6 +45,8 @@ val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
     description = "Install packages from package.json"
     setWorkingDir(file("${project.projectDir}/src/frontend"))
     setArgs(listOf("install"))
+    inputs.file("${project.projectDir}/src/frontend/package-lock.json")
+    outputs.dir("${project.projectDir}/src/frontend/node_modules")
 }
 
 val npmBuild = tasks.create("npmBuild", NpmTask::class) {
@@ -53,6 +55,8 @@ val npmBuild = tasks.create("npmBuild", NpmTask::class) {
     setWorkingDir(file("${project.projectDir}/src/frontend"))
     setArgs(listOf("run", "build"))
     mustRunAfter(npmInstall2)
+    inputs.dir("${project.projectDir}/src/frontend/")
+    outputs.dir("${project.projectDir}/src/main/resources/frontend/")
 }
 
 tasks.withType<KotlinCompile> {
