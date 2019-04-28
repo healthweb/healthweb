@@ -1,10 +1,11 @@
 language: java
 jdk: oraclejdk8
+
 addons:
   sonarcloud:
     organization: jensim-github
     token:
       secure: "Q8JkyktCTDw6zgCK4mqMmZkAk1RDdigZNKHEX4+FDJkGENHPiEeVAkqgCyGFP7mRvGOiZ/T7BsyvtVUfXCKFceNYZ+0mn6MJ9jGvvkuMv2rLuiLSCvLhvIBFQTR6iccXUh1P26Or6hU0w1pys7xQiRjOxPzoT+cQckIK47wrAQRUF+odf63xbSZ+mxj22BhQPkNxup/fHllmS5jXSRVTBtH1ihs9WnOApzYss0Psifc7XO3uEQayfrFl5soX9gZigJ0M7akp5urlLfSHEjIf5YDuoL7GE2oSOQEhwG6+UGm2cOsl7TV3XGd9cHB7HWeXGKP6Gyno9kml+c9f66Ft+n0HsjeA356gFoWkDWy5ig9/j3qoqUs2ofnwonSZmL3ULNIkRQrn4ykFj+qPePAotYbVo1P5ajXHgMJcz41LlGBs8MfE/8GRKHNfoTmb1HvY7186dIBSyJfA06kBbnSdy0UPWpoELl2htZGhQf7hL1AQB4dqyd5rPVW4eBJEU+4Z4MOIVOjpfV8+0drX0/Tv/iYhfuqzNf9NQ/Dvqn09ptjv5XrwMIoQQ6UaRA6HeBlniw/l0QMtZCeZXrASmI1oGzJbMKgMf/5nn9DvVPuTXJLev7QOZvVjsSVv42p4XUclJjb3osIi4RHAYtaWa1XIBKjlB6scAr+16s6i08l87o0="
-install: true # Skip the installation phase to not run gradle build twice
-script:
+
+after_success:
   - ./gradlew sonarqube
