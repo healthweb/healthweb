@@ -13,7 +13,7 @@ Frontend
 ----
 Backend
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=se.jensim.testinggrounds%3Aktor-graal&metric=alert_status)](https://sonarcloud.io/dashboard?id=se.jensim.testinggrounds%3Aktor-graal)
-[![Backend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=se.jensim.testinggrounds%3Aktor-graal&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=se.jensim.testinggrounds%3Aktor-graal)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=se.jensim.testinggrounds%3Atestinggrounds-ktor&metric=alert_status)](https://sonarcloud.io/dashboard?id=se.jensim.testinggrounds%3Atestinggrounds-ktor)
+[![Backend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=se.jensim.testinggrounds%3Atestinggrounds-ktor&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=se.jensim.testinggrounds%3Atestinggrounds-ktor)
 
 ----
