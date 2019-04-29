@@ -61,9 +61,9 @@ class BroadcastServer(private val objectMapper: ObjectMapper) {
      * Sends a [message] to a list of [this] [WebSocketSession].
      */
     suspend fun List<WebSocketSession>.send(frame: Frame) {
+        log.debug("sending $frame to $size sockets")
         forEach {
             try {
-                log.info("sending")
                 it.send(frame.copy())
             } catch (t: Throwable) {
                 try {
