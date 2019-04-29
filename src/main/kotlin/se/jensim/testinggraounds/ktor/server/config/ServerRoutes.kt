@@ -15,7 +15,7 @@ import java.io.File
 @KtorExperimentalAPI
 fun Route.root() {
     route("api") {
-        healthcheck()
+        // healthcheck()
     }
     static("/") {
         val conf = HoconApplicationConfig(ConfigFactory.load())
