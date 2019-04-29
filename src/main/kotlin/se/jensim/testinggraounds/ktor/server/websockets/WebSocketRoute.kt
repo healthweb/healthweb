@@ -6,7 +6,6 @@ import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.websocket.webSocket
-import kotlinx.coroutines.channels.consumeEach
 import org.slf4j.LoggerFactory
 import se.jensim.testinggraounds.ktor.server.config.ObjectMapperConfig.config
 import java.util.concurrent.ConcurrentHashMap
@@ -40,8 +39,8 @@ object WebSocketRoute {
             }
             try {
                 server.memberJoin(session.id, this)
-                incoming.consumeEach {
-                    log.info("Got something I should not [$it]")
+                for (frame in incoming) {
+                    log.warn("Got something I should not [$frame]")
                 }
             } catch (e: Exception) {
                 log.error("Horrible exception in websocket connection", e)
