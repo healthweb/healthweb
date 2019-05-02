@@ -17,11 +17,12 @@ fun Route.healthcheck() {
             call.respond("OK")
         }
         post("/") {
-            val hc = call.receive(Healthcheck::class)
-            broadcast(hc)
-            call.respond("OK")
+            val hc = call.receive(HealthcheckEndpoint::class)
+            val resp = HealthCheckCrawlerService.service.crawl(hc)
+            call.respond(resp)
+            broadcast(resp)
         }
         healthcheckMock()
-        createBroadcastPath("", Healthcheck::class.java)
+        createBroadcastPath("", HealthcheckEndpoint::class.java)
     }
 }
