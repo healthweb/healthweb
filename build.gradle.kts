@@ -7,21 +7,22 @@ plugins {
     id("org.sonarqube") version "2.7"
     application
 }
+repositories {
+    mavenCentral()
+}
+group = "se.jensim.testinggrounds"
+version = "1.0-SNAPSHOT"
 
 val ktorVersion = "1.1.4"
 val jacksonVersion = "2.9.8"
 val logbackVersion = "1.2.3"
 val slf4jVersion = "1.7.26"
 
-group = "se.jensim.testinggrounds"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation(project("shared"))
+
+    implementation("io.ktor:ktor-client-apache:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     implementation("io.ktor:ktor-websockets:$ktorVersion")
@@ -42,7 +43,16 @@ node {
     download = false
 }
 
+val copyTsFiles = tasks.create("copyTsFiles",Copy::class){
+    val shared = project("shared")
+    val a = shared.tasks.withType(Test::class)
+    dependsOn(a)
+    from("${shared.buildDir}/classes/kotlin/test/shared-types.d.ts")
+    into("${project.projectDir}/src/frontend/src/shared")
+}
+
 val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
+    dependsOn(copyTsFiles)
     group = "node"
     description = "Install packages from package.json"
     setWorkingDir(file("${project.projectDir}/src/frontend"))

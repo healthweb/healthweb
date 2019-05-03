@@ -6,9 +6,9 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
-import se.jensim.testinggraounds.ktor.server.healthcheck.DropwizardHealthCheck
-import se.jensim.testinggraounds.ktor.server.healthcheck.HealthCheck
-import se.jensim.testinggraounds.ktor.server.healthcheck.HealthCheckError
+import se.jensim.shared.models.DropwizardHealthCheck
+import se.jensim.shared.models.HealthCheck
+import se.jensim.shared.models.HealthCheckError
 
 fun Route.healthcheckMock() {
     route("/mock") {
@@ -30,3 +30,5 @@ private val m: DropwizardHealthCheck = mapOf(
         )
     )
 )
+
+
