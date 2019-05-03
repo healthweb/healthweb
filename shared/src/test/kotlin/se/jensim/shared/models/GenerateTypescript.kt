@@ -21,7 +21,9 @@ class GenerateTypescript {
             rootClasses = setOf(HealthCheckEndpoint::class),
             intTypeName = "int",
             voidType = VoidType.UNDEFINED
+
         ).definitionsText
+            .replace(Regex("interface "), "export interface ")
 
         val stream = newFile.outputStream()
         stream.write(tsText.toByteArray())

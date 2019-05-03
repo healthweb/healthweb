@@ -1,7 +1,7 @@
 import {Injectable, OnDestroy} from '@angular/core';
 // @ts-ignore
 import WebSocketAsPromised from 'websocket-as-promised';
-import {HealthCheck} from "../model/health-check";
+import {HealthCheckEndpoint} from '../../../shared/shared-types'
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class HealthCheckService implements OnDestroy {
         await this.wsp.open();
         this.wsp.send('message');
         this.wsp.onMessage.addListener(msg => {
-          let hc: HealthCheck = JSON.parse(msg);
+          let hc: HealthCheckEndpoint = JSON.parse(msg);
           console.log(hc.url);
         });
       } catch (e) {
