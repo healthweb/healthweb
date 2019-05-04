@@ -8,8 +8,8 @@ import java.io.File
 
 class GenerateTypescript {
 
-    val dir = File(GenerateTypescript::class.java.getResource("/").toURI())
-    val newFile = File(dir, "shared-types.d.ts")
+    private val dir = File(GenerateTypescript::class.java.getResource("/").toURI())
+    private val newFile = File(dir, "shared-types.d.ts")
 
     @Test
     fun name() {

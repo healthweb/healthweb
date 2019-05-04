@@ -8,13 +8,14 @@ import io.ktor.client.request.get
 import io.ktor.client.response.HttpResponse
 import io.ktor.client.response.readText
 import se.jensim.shared.models.DropwizardHealthCheck
+import se.jensim.shared.models.HealthCheckEndpoint
 import se.jensim.testinggraounds.ktor.server.config.ObjectMapperConfig
 
 class HealthcheckCrawler(private val client: HttpClient, val ob: ObjectMapper) {
 
     private val typeRef = object :TypeReference<DropwizardHealthCheck>(){}
 
-    suspend fun crawl(endpoint: HealthcheckEndpoint): DropwizardHealthCheck {
+    suspend fun crawl(endpoint: HealthCheckEndpoint): DropwizardHealthCheck {
         val resp: HttpResponse = client.get(endpoint.url)
         return ob.readValue(resp.readText(), typeRef)
     }

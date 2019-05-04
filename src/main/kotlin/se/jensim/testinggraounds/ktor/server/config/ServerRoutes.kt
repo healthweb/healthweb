@@ -12,7 +12,6 @@ import io.ktor.util.KtorExperimentalAPI
 import se.jensim.testinggraounds.ktor.server.healthcheck.healthcheck
 import java.io.File
 
-@KtorExperimentalAPI
 fun Route.root() {
     route("api") {
         // healthcheck()

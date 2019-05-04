@@ -21,7 +21,6 @@ version = "1.0-SNAPSHOT"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.reflections:reflections:0.9.11")
 
     testImplementation(kotlin("test"))
     testImplementation("junit:junit:4.12")

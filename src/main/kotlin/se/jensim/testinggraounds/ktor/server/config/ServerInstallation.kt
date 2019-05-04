@@ -7,6 +7,7 @@ import io.ktor.features.Compression
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.jackson.jackson
+import io.ktor.util.KtorExperimentalAPI
 import se.jensim.testinggraounds.ktor.server.config.ObjectMapperConfig.config
 import se.jensim.testinggraounds.ktor.server.websockets.setupWebSockets
 
