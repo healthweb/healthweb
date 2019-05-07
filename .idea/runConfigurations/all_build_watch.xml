@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="all:build:watch" type="CompoundRunConfigurationType">
+    <toRun name="be:build:watch" type="GradleRunConfiguration" />
+    <toRun name="fe:build:watch" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>
