@@ -47,7 +47,7 @@ val copyTsFiles = tasks.create("copyTsFiles",Copy::class){
     val shared = project("shared")
     val a = shared.tasks.withType(Test::class)
     dependsOn(a)
-    from("${shared.buildDir}/classes/kotlin/test/shared-types.d.ts")
+    from("${shared.buildDir}/ts/shared-types.d.ts")
     into("${project.projectDir}/src/frontend/src/shared")
 }
 

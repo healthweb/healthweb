@@ -8,27 +8,38 @@ import java.io.File
 
 class GenerateTypescript {
 
-    private val dir = File(GenerateTypescript::class.java.getResource("/").toURI())
-    private val newFile = File(dir, "shared-types.d.ts")
+    private val dirName = "build/ts"
+    private val fileName = "shared-types.d.ts"
 
     @Test
     fun name() {
-        if (newFile.exists()) {
-            newFile.delete()
-        }
-        newFile.createNewFile()
+        val newFile = getFileRef()
+
         val tsText = TypeScriptGenerator(
             rootClasses = setOf(HealthCheckEndpoint::class),
             intTypeName = "int",
             voidType = VoidType.UNDEFINED
 
         ).definitionsText
-            .replace(Regex("interface "), "export interface ")
+            .split("\n")
+            .joinToString("\n") {
+                it.replace(Regex("^(interface|type) "), "export $1 ")
+            }
 
-        val stream = newFile.outputStream()
-        stream.write(tsText.toByteArray())
-        stream.close()
+        newFile.writeText(tsText)
 
         Assert.assertTrue(newFile.readText().isNotEmpty())
+    }
+
+    fun getFileRef(): File {
+        val rootUrl = GenerateTypescript::class.java.classLoader.getResource("/")
+        val dir: File = if (rootUrl == null) {
+            File(dirName)
+        } else {
+            File(File(rootUrl.toURI()), dirName)
+        }
+        dir.mkdirs()
+
+        return File(dir, fileName)
     }
 }
