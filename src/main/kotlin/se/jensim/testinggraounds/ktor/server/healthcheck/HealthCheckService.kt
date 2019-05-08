@@ -45,7 +45,7 @@ class HealthCheckService(
         try {
             if (doRun) {
                 mongoCollection.find(filter()).consumeEach {
-                    if (it.lastProbeTime != null && it.probeIntervalOverride != null && TODO()) {
+                    if (it.lastProbeTime != null && it.probeIntervalOverride != null && (it.lastProbeTime as Long + it.probeIntervalOverride as Long) < System.currentTimeMillis()) {
                         return@consumeEach
                     }
                     val newResult = crawler.crawl(it)
