@@ -9,7 +9,6 @@ import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.util.KtorExperimentalAPI
 import se.jensim.testinggraounds.ktor.server.config.install
 import se.jensim.testinggraounds.ktor.server.config.root
 

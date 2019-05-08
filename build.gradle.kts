@@ -1,5 +1,4 @@
 import com.moowork.gradle.node.npm.NpmTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.3.31"
@@ -9,6 +8,8 @@ plugins {
 }
 repositories {
     mavenCentral()
+    maven("https://dl.bintray.com/ylemoigne/maven")
+
 }
 group = "se.jensim.testinggrounds"
 version = "1.0-SNAPSHOT"
@@ -17,22 +18,33 @@ val ktorVersion = "1.1.4"
 val jacksonVersion = "2.9.8"
 val logbackVersion = "1.2.3"
 val slf4jVersion = "1.7.26"
+val kmongoVersion = "3.10.1"
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation(project("shared"))
+
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
 
     implementation("io.ktor:ktor-client-apache:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     implementation("io.ktor:ktor-websockets:$ktorVersion")
 
+    implementation("org.mongodb:mongo-java-driver:3.10.2")
+
+    implementation("fr.javatic.mongo:mongo-jackson-codec:3.2.2__0.5")
+    implementation("org.litote.kmongo:kmongo-id-jackson:$kmongoVersion")
+    implementation("org.litote.kmongo:kmongo-jackson-mapping:$kmongoVersion")
+    implementation("org.litote.kmongo:kmongo-coroutine-core:$kmongoVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    testImplementation("com.github.fakemongo:fongo:2.1.0")
 }
 
 application {
@@ -71,9 +83,6 @@ val npmBuild = tasks.create("npmBuild", NpmTask::class) {
     outputs.dir("${project.projectDir}/src/main/resources/frontend/")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
 
 tasks.assemble {
     dependsOn(npmInstall2, npmBuild)

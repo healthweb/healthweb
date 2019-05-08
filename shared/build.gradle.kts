@@ -1,10 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-
     dependencies {
         classpath(kotlin("gradle-plugin", version = "1.3.31"))
     }
@@ -21,6 +17,7 @@ version = "1.0-SNAPSHOT"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.mongodb:bson:3.10.0")
 
     testImplementation(kotlin("test"))
     testImplementation("junit:junit:4.12")

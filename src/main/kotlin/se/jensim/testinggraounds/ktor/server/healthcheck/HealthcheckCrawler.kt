@@ -7,21 +7,29 @@ import io.ktor.client.engine.apache.Apache
 import io.ktor.client.request.get
 import io.ktor.client.response.HttpResponse
 import io.ktor.client.response.readText
+import org.slf4j.LoggerFactory
 import se.jensim.shared.models.DropwizardHealthCheck
 import se.jensim.shared.models.HealthCheckEndpoint
+import se.jensim.shared.models.HealthChecks
 import se.jensim.testinggraounds.ktor.server.config.ObjectMapperConfig
 
-class HealthcheckCrawler(private val client: HttpClient, val ob: ObjectMapper) {
+class HealthcheckCrawler(private val client: HttpClient, private val ob: ObjectMapper) {
 
-    private val typeRef = object :TypeReference<DropwizardHealthCheck>(){}
+    private val log = LoggerFactory.getLogger(javaClass)
+    private val typeRef = object : TypeReference<DropwizardHealthCheck>() {}
 
-    suspend fun crawl(endpoint: HealthCheckEndpoint): DropwizardHealthCheck {
+    suspend fun crawl(endpoint: HealthCheckEndpoint): HealthChecks = try {
+        log.debug("Crawling ${endpoint.url}")
         val resp: HttpResponse = client.get(endpoint.url)
-        return ob.readValue(resp.readText(), typeRef)
+        val respText = resp.readText()
+        HealthChecks(ob.readValue(respText, typeRef))
+    } catch (e: Exception) {
+        log.debug("Failed crawling ${endpoint.url}")
+        HealthChecks(null)
     }
 }
 
-object HealthCheckCrawlerService {
+object HealthCheckCrawlerSingleton {
 
     private val client: HttpClient by lazy {
         HttpClient(Apache) {
@@ -34,5 +42,5 @@ object HealthCheckCrawlerService {
             }
         }
     }
-    val service by lazy { HealthcheckCrawler(client, ObjectMapperConfig.config()) }
+    val singleton by lazy { HealthcheckCrawler(client, ObjectMapperConfig.config()) }
 }

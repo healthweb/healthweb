@@ -13,15 +13,17 @@ import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute.broadcast
 import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute.createBroadcastPath
 
 fun Route.healthcheck() {
+    val service = HealthCheckServiceSingleton.singleton
+    service.launchCrawler()
     route("/health") {
         get("/") {
             call.respond("OK")
         }
         post("/") {
             val hc = call.receive(HealthCheckEndpoint::class)
-            val resp = HealthCheckCrawlerService.service.crawl(hc)
-            call.respond(resp)
-            broadcast(resp)
+            service.saveNew(hc)
+            call.respond(hc)
+            broadcast(hc)
         }
         healthcheckMock()
         createBroadcastPath("", HealthCheckEndpoint::class.java)
