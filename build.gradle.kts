@@ -33,7 +33,6 @@ dependencies {
 
     implementation("org.mongodb:mongo-java-driver:3.10.2")
 
-    implementation("fr.javatic.mongo:mongo-jackson-codec:3.2.2__0.5")
     implementation("org.litote.kmongo:kmongo-id-jackson:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-jackson-mapping:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-coroutine-core:$kmongoVersion")

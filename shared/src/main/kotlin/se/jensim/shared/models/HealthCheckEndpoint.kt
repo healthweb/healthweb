@@ -18,7 +18,9 @@ data class HealthCheckEndpoint(
     @BsonProperty
     val lastProblemTime: Long? = null,
     @BsonProperty
-    val probeIntervalOverride: Long? = null
+    val probeIntervalOverride: Long? = null,
+    @BsonProperty
+    val tags: List<String> = emptyList()
 
 ) {
     companion object {
@@ -53,4 +55,5 @@ enum class ServiceStatus {
     UNHEALTHY,
     UNRESPONSIVE,
     UNSTABLE,
+    UNKNOWN,
 }

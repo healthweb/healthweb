@@ -13,7 +13,7 @@ import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute.broadcast
 import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute.createBroadcastPath
 
 fun Route.healthcheck() {
-    val service = HealthCheckServiceSingleton.singleton
+    val service = HealthCheckService.singleton
     service.launchCrawler()
     route("/health") {
         get("/") {

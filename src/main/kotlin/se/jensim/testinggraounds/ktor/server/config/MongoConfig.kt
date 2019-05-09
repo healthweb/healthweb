@@ -10,7 +10,7 @@ import se.jensim.testinggraounds.ktor.server.config.PropertiesConfig.mongoUrl
 object MongoConfig {
 
     private val client by lazy { KMongo.createClient(mongoUrl()).coroutine }
-    private val database by lazy { client.getDatabase("dropwizard_dashboard") }
+    val database by lazy { client.getDatabase("dropwizard_dashboard") }
 
     val healthCheckEndpointCollection by lazy {
         database.getCollection<HealthCheckEndpoint>("healthCheckEndpoint").apply {

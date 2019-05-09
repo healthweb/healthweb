@@ -17,7 +17,6 @@ class GenerateTypescript {
 
         val tsText = TypeScriptGenerator(
             rootClasses = setOf(HealthCheckEndpoint::class),
-            intTypeName = "int",
             voidType = VoidType.UNDEFINED
 
         ).definitionsText
