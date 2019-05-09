@@ -22,9 +22,9 @@ class HealthCheckServiceTest {
         val mockCrawler: HealthcheckCrawler = mock {
             onBlocking { crawl(endpoint.url) } doReturn answer
         }
-        val mochWebSocket: WebSocketService = mock()
+        val mockWebSocket: WebSocketService = mock()
         tempCollection(HealthCheckEndpoint::class.java) {
-            val service = HealthCheckService(it, mockCrawler, mochWebSocket)
+            val service = HealthCheckService(it, mockCrawler, mockWebSocket)
             assertThat(it.countDocuments(), equalTo(0L))
             it.insertOne(endpoint)
             assertThat(it.countDocuments(), equalTo(1L))
