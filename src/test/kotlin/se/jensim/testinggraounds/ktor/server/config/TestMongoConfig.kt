@@ -7,10 +7,15 @@ import java.util.*
 
 object TestMongoConfig {
 
-    fun <T : Any> tempCollection(clazz: Class<T>, action: suspend (CoroutineCollection<T>) -> Unit) {
+    fun <T : Any> tempCollection(
+        clazz: Class<T>,
+        collectionName: String? = null,
+        action: suspend (CoroutineCollection<T>) -> Unit
+    ) {
         runBlocking {
             val col: CoroutineCollection<T> =
-                MongoConfig.database.database.getCollection(UUID.randomUUID().toString(), clazz).coroutine
+                MongoConfig.database.database.getCollection(collectionName ?: UUID.randomUUID().toString(), clazz)
+                    .coroutine
             try {
                 action(col)
             } finally {
