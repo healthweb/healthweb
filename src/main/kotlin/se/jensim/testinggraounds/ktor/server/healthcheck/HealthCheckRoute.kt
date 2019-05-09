@@ -9,8 +9,8 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import se.jensim.shared.models.HealthCheckEndpoint
 import se.jensim.testinggraounds.ktor.server.healthcheck.mock.healthcheckMock
-import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute.broadcast
-import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute.createBroadcastPath
+import se.jensim.testinggraounds.ktor.server.websockets.WebSocketService
+import se.jensim.testinggraounds.ktor.server.websockets.createBroadcastPath
 
 fun Route.healthcheck() {
     val service = HealthCheckService.singleton
@@ -23,7 +23,7 @@ fun Route.healthcheck() {
             val hc = call.receive(HealthCheckEndpoint::class)
             service.saveNew(hc)
             call.respond(hc)
-            broadcast(hc)
+            WebSocketService.singleton.broadcast(hc)
         }
         healthcheckMock()
         createBroadcastPath("", HealthCheckEndpoint::class.java)

@@ -10,13 +10,14 @@ import se.jensim.shared.models.HealthCheckEndpoint
 import se.jensim.shared.models.HealthChecks
 import se.jensim.shared.models.ServiceStatus
 import se.jensim.testinggraounds.ktor.server.config.MongoConfig
-import se.jensim.testinggraounds.ktor.server.websockets.WebSocketRoute
+import se.jensim.testinggraounds.ktor.server.websockets.WebSocketService
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 
 class HealthCheckService(
     private val mongoCollection: CoroutineCollection<HealthCheckEndpoint>,
-    private val crawler: HealthcheckCrawler
+    private val crawler: HealthcheckCrawler,
+    private val webSocketService: WebSocketService
 ) {
 
     companion object {
@@ -24,9 +25,11 @@ class HealthCheckService(
         private const val stabilityBreakpoint = 300_000L
 
         val singleton by lazy {
-            val col = MongoConfig.healthCheckEndpointCollection
-            val crawler = HealthcheckCrawler.singleton
-            HealthCheckService(col, crawler)
+            HealthCheckService(
+                MongoConfig.healthCheckEndpointCollection,
+                HealthcheckCrawler.singleton,
+                WebSocketService.singleton
+            )
         }
     }
 
@@ -59,8 +62,7 @@ class HealthCheckService(
                         return@consumeEach
                     }
                     val newResult = crawler.crawl(it.url)
-                    val updated = update(it, newResult)
-                    WebSocketRoute.broadcast(updated)
+                    update(it, newResult)
                 }
             }
         } catch (e: Exception) {
@@ -72,7 +74,7 @@ class HealthCheckService(
         }
     }
 
-    suspend fun update(hc: HealthCheckEndpoint, newResult: HealthChecks): HealthCheckEndpoint {
+    suspend fun update(hc: HealthCheckEndpoint, newResult: HealthChecks) {
         val currentTimeMillis = System.currentTimeMillis()
         val updated = hc.copy(
             status = status(hc, newResult),
@@ -82,7 +84,7 @@ class HealthCheckService(
         )
 
         mongoCollection.save(updated)
-        return updated
+        webSocketService.broadcast(updated)
     }
 
     fun status(hc: HealthCheckEndpoint, newResult: HealthChecks): ServiceStatus =

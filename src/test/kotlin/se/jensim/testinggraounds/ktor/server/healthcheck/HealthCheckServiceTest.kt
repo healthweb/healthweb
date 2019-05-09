@@ -9,6 +9,7 @@ import se.jensim.shared.models.HealthCheck
 import se.jensim.shared.models.HealthCheckEndpoint
 import se.jensim.shared.models.HealthChecks
 import se.jensim.testinggraounds.ktor.server.config.TestMongoConfig.tempCollection
+import se.jensim.testinggraounds.ktor.server.websockets.WebSocketService
 
 class HealthCheckServiceTest {
 
@@ -18,11 +19,12 @@ class HealthCheckServiceTest {
     @Test
     fun crawlAll() {
         //given
-        val mock: HealthcheckCrawler = mock {
+        val mockCrawler: HealthcheckCrawler = mock {
             onBlocking { crawl(endpoint.url) } doReturn answer
         }
+        val mochWebSocket: WebSocketService = mock()
         tempCollection(HealthCheckEndpoint::class.java) {
-            val service = HealthCheckService(it, mock)
+            val service = HealthCheckService(it, mockCrawler, mochWebSocket)
             assertThat(it.countDocuments(), equalTo(0L))
             it.insertOne(endpoint)
             assertThat(it.countDocuments(), equalTo(1L))
