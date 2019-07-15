@@ -13,7 +13,7 @@ repositories {
     maven("https://dl.bintray.com/ylemoigne/maven")
 
 }
-group = "se.jensim.testinggrounds"
+group = "com.github.healthweb"
 version = "1.0-SNAPSHOT"
 
 val ktorVersion = "1.1.4"
@@ -65,9 +65,7 @@ node {
 
 val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
     dependsOn(tasks.kt2ts)
-    group = "node"
     description = "Install packages from package.json"
-    setWorkingDir(file("${project.projectDir}/src/frontend"))
     setArgs(listOf("install"))
     inputs.file("${project.projectDir}/src/frontend/package-lock.json")
     outputs.dir("${project.projectDir}/src/frontend/node_modules")
@@ -75,23 +73,54 @@ val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
 
 val npmBuild = tasks.create("npmBuild", NpmTask::class) {
     dependsOn(npmInstall2)
-    group = "node"
     description = "Build production release of the Frontend resources"
-    setWorkingDir(file("${project.projectDir}/src/frontend"))
     setArgs(listOf("run", "build"))
-    inputs.dir("${project.projectDir}/src/frontend/")
+    val baseDir = "${project.projectDir}/src/frontend/"
+    inputs.files(fileTree("$baseDir/src"), fileTree("$baseDir/e2e"), "$baseDir/package.json", "$baseDir/angular.json")
     outputs.dir("${project.projectDir}/src/main/resources/frontend/")
 }
 
-
-tasks.assemble {
-    dependsOn(npmInstall2, npmBuild)
+val npmTest: NpmTask = tasks.create("npmTest", NpmTask::class) {
+    dependsOn(npmInstall2)
+    group = "node"
+    description = "Test of the Frontend resources"
+    setArgs(listOf("run", "test"))
+    val baseDir = "${project.projectDir}/src/frontend"
+    inputs.files(fileTree("$baseDir/src"), fileTree("$baseDir/e2e"), "$baseDir/package.json", "$baseDir/angular.json")
+    outputs.dir("${project.projectDir}/src/main/resources/frontend/")
 }
 
-tasks.findByName("sonarqube")?.apply {
-    dependsOn(npmInstall2, npmBuild)
+val fatJar = task("fatJar", type = Jar::class) {
+    archiveBaseName.set("${project.name}-fat")
+    manifest {
+        attributes["Implementation-Title"] = "Jar File"
+        attributes["Implementation-Version"] = version
+        attributes["Main-Class"] = "se.jensim.testinggraounds.ktor.server.Server"
+    }
+    from(configurations.runtime.map { it.files.map { if (it.isDirectory) it else zipTree(it) } })
+    with(tasks["jar"] as CopySpec)
 }
 
-tasks.processResources {
-    mustRunAfter(npmBuild)
+tasks {
+    build {
+        dependsOn(fatJar)
+    }
+    assemble {
+        dependsOn(npmInstall2, npmBuild)
+    }
+    "sonarqube" {
+        dependsOn(npmInstall2, npmBuild)
+    }
+    processResources {
+        mustRunAfter(npmBuild)
+    }
+    test {
+        dependsOn(npmTest)
+    }
+
+    withType(NpmTask::class) {
+        val baseDir = "${project.projectDir}/src/frontend/"
+        group = "node"
+        setWorkingDir(file("${project.projectDir}/src/frontend/"))
+    }
 }

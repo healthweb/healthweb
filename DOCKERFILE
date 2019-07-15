@@ -1,0 +1,5 @@
+FROM java:8
+WORKDIR /
+ADD ./build/libs/dropwizard-healthweb-fat-1.0-SNAPSHOT.jar Server.jar
+EXPOSE 8080
+CMD java - jar Server.jar
