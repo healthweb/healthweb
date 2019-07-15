@@ -1,0 +1,25 @@
+.all-wrap {
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  * {
+    flex: 1;
+    display: block;
+
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}
