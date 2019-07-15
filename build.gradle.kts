@@ -64,7 +64,7 @@ node {
 }
 
 val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
-    dependsOn(tasks.processResources)
+    dependsOn(tasks.kt2ts)
     group = "node"
     description = "Install packages from package.json"
     setWorkingDir(file("${project.projectDir}/src/frontend"))
@@ -74,11 +74,11 @@ val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
 }
 
 val npmBuild = tasks.create("npmBuild", NpmTask::class) {
+    dependsOn(npmInstall2)
     group = "node"
     description = "Build production release of the Frontend resources"
     setWorkingDir(file("${project.projectDir}/src/frontend"))
     setArgs(listOf("run", "build"))
-    mustRunAfter(npmInstall2)
     inputs.dir("${project.projectDir}/src/frontend/")
     outputs.dir("${project.projectDir}/src/main/resources/frontend/")
 }
