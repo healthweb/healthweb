@@ -1,8 +1,10 @@
-package se.jensim.shared.models
+package se.jensim.testinggraounds.ktor.server.healthcheck
 
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.codecs.pojo.annotations.BsonProperty
+import se.jensim.testinggraounds.ktor.server.config.ToTypeScript
 
+@ToTypeScript
 data class HealthCheckEndpoint(
     @BsonId
     @BsonProperty

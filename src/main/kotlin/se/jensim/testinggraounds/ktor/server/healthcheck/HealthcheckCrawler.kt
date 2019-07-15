@@ -8,8 +8,6 @@ import io.ktor.client.request.get
 import io.ktor.client.response.HttpResponse
 import io.ktor.client.response.readText
 import org.slf4j.LoggerFactory
-import se.jensim.shared.models.DropwizardHealthCheck
-import se.jensim.shared.models.HealthChecks
 import se.jensim.testinggraounds.ktor.server.config.ObjectMapperConfig
 
 open class HealthcheckCrawler(private val client: HttpClient, private val ob: ObjectMapper) {
@@ -17,7 +15,7 @@ open class HealthcheckCrawler(private val client: HttpClient, private val ob: Ob
     companion object {
 
         val singleton by lazy {
-            val client: HttpClient = HttpClient(Apache) {
+            val client = HttpClient(Apache) {
                 expectSuccess = false
                 engine {
                     socketTimeout = 1_000
@@ -37,6 +35,7 @@ open class HealthcheckCrawler(private val client: HttpClient, private val ob: Ob
         log?.debug("Crawling $endpoint")
         val resp: HttpResponse = client.get(endpoint)
         val respText = resp.readText()
+        @Suppress("BlockingMethodInNonBlockingContext")
         HealthChecks(ob.readValue(respText, typeRef))
     } catch (e: Exception) {
         log?.debug("Failed crawling $endpoint")

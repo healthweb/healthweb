@@ -1,3 +1,1 @@
 rootProject.name = 'testinggrounds-ktor'
-
-include("shared")

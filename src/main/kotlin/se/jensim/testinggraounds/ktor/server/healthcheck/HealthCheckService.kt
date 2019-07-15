@@ -6,9 +6,6 @@ import org.bson.Document
 import org.bson.conversions.Bson
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.slf4j.LoggerFactory
-import se.jensim.shared.models.HealthCheckEndpoint
-import se.jensim.shared.models.HealthChecks
-import se.jensim.shared.models.ServiceStatus
 import se.jensim.testinggraounds.ktor.server.config.MongoConfig
 import se.jensim.testinggraounds.ktor.server.websockets.WebSocketService
 import java.util.concurrent.atomic.AtomicBoolean

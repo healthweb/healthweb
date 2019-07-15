@@ -7,7 +7,6 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import se.jensim.shared.models.HealthCheckEndpoint
 import se.jensim.testinggraounds.ktor.server.healthcheck.mock.healthcheckMock
 import se.jensim.testinggraounds.ktor.server.websockets.WebSocketService
 import se.jensim.testinggraounds.ktor.server.websockets.createBroadcastPath

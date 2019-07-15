@@ -4,8 +4,8 @@ import com.mongodb.client.model.IndexOptions
 import kotlinx.coroutines.runBlocking
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
-import se.jensim.shared.models.HealthCheckEndpoint
 import se.jensim.testinggraounds.ktor.server.config.PropertiesConfig.mongoUrl
+import se.jensim.testinggraounds.ktor.server.healthcheck.HealthCheckEndpoint
 
 object MongoConfig {
 

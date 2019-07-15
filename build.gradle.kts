@@ -5,6 +5,8 @@ plugins {
     id("com.moowork.node") version "1.3.1"
     id("org.sonarqube") version "2.7"
     application
+    jacoco
+    id("se.jensim.kt2ts") version "0.7.8"
 }
 repositories {
     mavenCentral()
@@ -21,8 +23,6 @@ val slf4jVersion = "1.7.26"
 val kmongoVersion = "3.10.1"
 
 dependencies {
-    implementation(project("shared"))
-
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
 
@@ -40,9 +40,19 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
-    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+}
+
+kt2ts {
+    annotation = "se.jensim.testinggraounds.ktor.server.config.ToTypeScript"
+    val a = tasks.compileKotlin.map { it.outputs.files.files }
+    classesDirs = files(
+        tasks.compileKotlin.map { it.outputs },
+        tasks.compileJava.get().outputs
+    )
+    outputFile = file("$projectDir/src/frontend/src/shared/shared-types.d.ts")
 }
 
 application {
@@ -53,16 +63,8 @@ node {
     download = false
 }
 
-val copyTsFiles = tasks.create("copyTsFiles",Copy::class){
-    val shared = project("shared")
-    val a = shared.tasks.withType(Test::class)
-    dependsOn(a)
-    from("${shared.buildDir}/ts/shared-types.d.ts")
-    into("${project.projectDir}/src/frontend/src/shared")
-}
-
 val npmInstall2 = tasks.create("npmInstall2", NpmTask::class) {
-    dependsOn(copyTsFiles)
+    dependsOn(tasks.processResources)
     group = "node"
     description = "Install packages from package.json"
     setWorkingDir(file("${project.projectDir}/src/frontend"))
