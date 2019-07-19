@@ -1,0 +1,24 @@
+<settings Xmlns="Http://Maven.Apache.Org/SETTINGS/1.0.0"
+          Xmlns:Xsi="Http://Www.W3.Org/2001/XMLSchema-Instance"
+          Xsi:SchemaLocation="Http://Maven.Apache.Org/SETTINGS/1.0.0
+                      Http://Maven.Apache.Org/Xsd/Settings-1.0.0.Xsd">
+    <servers>
+        <server>
+            <id>ossrh</id>
+            <username>${env.OSSRH_USERNAME}</username>
+            <password>${env.OSSRH_PASSWORD}</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+            </properties>
+        </profile>
+    </profiles>
+</settings>

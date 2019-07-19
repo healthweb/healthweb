@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.healthweb</groupId>
+        <artifactId>healthweb-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>healthweb-shared</artifactId>
+    <description>Dropwizard healthweb shared classes</description>
+
+    <properties>
+        <kotlin.version>1.3.41</kotlin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <packaging>jar</packaging>
+
+    <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.j2ts</groupId>
+                <artifactId>java-to-typescript-maven-plugin</artifactId>
+                <version>${j2ts.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>j2ts</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <annotation>se.jensim.testinggraounds.ktor.shared.ToTypeScript</annotation>
+                    <!-- Optional -->
+                    <outputFileRef>${project.build.outputDirectory}/j2ts/${project.artifactId}.d.ts</outputFileRef>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
