@@ -13,7 +13,7 @@
 
     <modules>
         <module>api</module>
-        <module>jdbc</module>
+        <!--<module>jdbc</module>-->
     </modules>
 
     <build>
