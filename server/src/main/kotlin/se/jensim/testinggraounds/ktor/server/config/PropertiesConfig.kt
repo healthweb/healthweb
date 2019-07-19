@@ -7,10 +7,8 @@ object PropertiesConfig {
 
     private val conf = HoconApplicationConfig(ConfigFactory.load())
 
-    fun isProd(): Boolean {
-        val env = conf.config("ktor.deployment").property("environment").getString()
-        return env == "production"
-    }
+    fun isProd(): Boolean = PropertiesConfig::class.java
+            .protectionDomain?.codeSource?.location?.file?.endsWith(".jar") == true
 
     fun mongoUrl(): String = conf.config("mongo").property("url").getString()
 }

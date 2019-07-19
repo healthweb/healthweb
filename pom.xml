@@ -12,6 +12,7 @@
 
     <modules>
         <module>shared</module>
+        <module>datasource</module>
         <module>frontend</module>
         <module>server</module>
     </modules>

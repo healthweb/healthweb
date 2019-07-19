@@ -18,7 +18,7 @@ fun Route.root() {
             File(javaClass.getResource("/frontend").toURI())
         } else {
             // Assume dev mode
-            File("src/main/resources/frontend")
+            File("../frontend/dist")
         }
         files(".")
         default("index.html")

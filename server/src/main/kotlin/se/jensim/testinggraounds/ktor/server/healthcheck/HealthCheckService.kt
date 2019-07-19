@@ -8,6 +8,9 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 import org.slf4j.LoggerFactory
 import se.jensim.testinggraounds.ktor.server.config.MongoConfig
 import se.jensim.testinggraounds.ktor.server.websockets.WebSocketService
+import se.jensim.testinggraounds.ktor.shared.HealthCheckEndpoint
+import se.jensim.testinggraounds.ktor.shared.HealthChecks
+import se.jensim.testinggraounds.ktor.shared.ServiceStatus
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 

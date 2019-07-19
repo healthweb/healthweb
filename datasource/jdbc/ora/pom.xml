@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.healthweb</groupId>
+        <artifactId>healthweb-datasource-jdbc</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>healthweb-datasource-jdbc-ora</artifactId>
+    <description>Dropwizard healthweb ora jdbc datasource</description>
+
+    <packaging>jar</packaging>
+
+
+</project>
