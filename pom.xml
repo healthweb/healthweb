@@ -12,7 +12,6 @@
 
     <modules>
         <module>shared</module>
-        <module>datasource</module>
         <module>frontend</module>
         <module>server</module>
     </modules>
@@ -24,11 +23,11 @@
         <mockito-kotlin.version>2.1.0</mockito-kotlin.version>
         <j2ts.version>0.1.0</j2ts.version>
 
-        <ktorVersion>1.1.4</ktorVersion>
-        <jacksonVersion>2.9.8</jacksonVersion>
-        <logbackVersion>1.2.3</logbackVersion>
-        <slf4jVersion>1.7.26</slf4jVersion>
-        <kmongoVersion>3.10.1</kmongoVersion>
+        <ktor.version>1.1.4</ktor.version>
+        <jackson.version>2.9.8</jackson.version>
+        <logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.26</slf4j.version>
+        <kmongo.version>3.10.1</kmongo.version>
     </properties>
 
     <build>

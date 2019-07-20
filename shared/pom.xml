@@ -47,7 +47,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <annotation>se.jensim.testinggraounds.ktor.shared.ToTypeScript</annotation>
+                    <annotation>com.github.healthweb.shared.ToTypeScript</annotation>
                     <!-- Optional -->
                     <outputFileRef>${project.build.outputDirectory}/j2ts/${project.artifactId}.d.ts</outputFileRef>
                 </configuration>

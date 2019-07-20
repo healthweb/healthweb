@@ -33,25 +33,25 @@
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-client-apache</artifactId>
-            <version>${ktorVersion}</version>
+            <version>${ktor.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-netty</artifactId>
-            <version>${ktorVersion}</version>
+            <version>${ktor.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-jackson</artifactId>
-            <version>${ktorVersion}</version>
+            <version>${ktor.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-websockets</artifactId>
-            <version>${ktorVersion}</version>
+            <version>${ktor.version}</version>
         </dependency>
 
 
@@ -65,37 +65,37 @@
         <dependency>
             <groupId>org.litote.kmongo</groupId>
             <artifactId>kmongo-id-jackson</artifactId>
-            <version>${kmongoVersion}</version>
+            <version>${kmongo.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.litote.kmongo</groupId>
             <artifactId>kmongo-jackson-mapping</artifactId>
-            <version>${kmongoVersion}</version>
+            <version>${kmongo.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.litote.kmongo</groupId>
             <artifactId>kmongo-coroutine-core</artifactId>
-            <version>${kmongoVersion}</version>
+            <version>${kmongo.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jacksonVersion}</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${logbackVersion}</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4jVersion}</version>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
@@ -105,10 +105,42 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Database drivers -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.21.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>18.3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-tests</artifactId>
-            <version>${ktorVersion}</version>
+            <version>${ktor.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -1,0 +1,6 @@
+FROM java:8
+WORKDIR /
+ADD ../server/build/libs/dropwizard-healthweb-fat-0.0.1-SNAPSHOT.jar Server.jar
+ADD db-driver.jar db-driver.jar
+EXPOSE 8080
+CMD java -cp *.jar com.github.healthweb.server.Server
