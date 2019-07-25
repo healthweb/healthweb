@@ -21,9 +21,9 @@ fun Route.healthcheck() {
         }
         post("/") {
             val hc = call.receive(HealthCheckEndpoint::class)
-            service.saveNew(hc)
-            call.respond(hc)
-            WebSocketService.singleton.broadcast(hc)
+            val saved: HealthCheckEndpoint = service.saveNew(hc)
+            call.respond(saved)
+            WebSocketService.singleton.broadcast(saved)
         }
         healthcheckMock()
         createBroadcastPath("", HealthCheckEndpoint::class.java)

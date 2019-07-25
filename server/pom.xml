@@ -54,32 +54,6 @@
             <version>${ktor.version}</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${mongo-java-driver.version}</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.litote.kmongo</groupId>
-            <artifactId>kmongo-id-jackson</artifactId>
-            <version>${kmongo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.litote.kmongo</groupId>
-            <artifactId>kmongo-jackson-mapping</artifactId>
-            <version>${kmongo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.litote.kmongo</groupId>
-            <artifactId>kmongo-coroutine-core</artifactId>
-            <version>${kmongo.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
@@ -97,12 +71,10 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed</artifactId>
+            <version>${exposed.version}</version>
         </dependency>
 
         <!-- Database drivers -->
@@ -130,13 +102,40 @@
             <version>42.2.2</version>
             <scope>provided</scope>
         </dependency>
+        <!-- TODO: Fix oracle dependency
         <dependency>
             <groupId>com.oracle.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
             <version>18.3.0.0</version>
             <scope>provided</scope>
         </dependency>
+        -->
 
+        <!-- Test -->
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
+            <version>2.24.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-websockets</artifactId>
+            <version>${ktor.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-tests</artifactId>
