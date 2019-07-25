@@ -6,14 +6,14 @@
 ----
 Frontend
 
-[![Frontend dependencies Status](https://david-dm.org/jensim/testinggrounds-ktor/status.svg?path=src/frontend)](https://david-dm.org/jensim/testinggrounds-ktor?path=src/frontend)
-[![Frontend devDependencies Status](https://david-dm.org/jensim/testinggrounds-ktor/dev-status.svg?path=src/frontend)](https://david-dm.org/jensim/testinggrounds-ktor?path=src/frontend&type=dev)
-[![Frontend Known Vulnerabilities](https://snyk.io/test/github/jensim/testinggrounds-ktor/badge.svg?targetFile=src%2Ffrontend%2Fpackage.json)](https://snyk.io/test/github/jensim/testinggrounds-ktor?targetFile=src%2Ffrontend%2Fpackage.json)
+[![Frontend dependencies Status](https://david-dm.org/jensim/testinggrounds-ktor/status.svg?path=frontend)](https://david-dm.org/jensim/testinggrounds-ktor?path=frontend)
+[![Frontend devDependencies Status](https://david-dm.org/jensim/testinggrounds-ktor/dev-status.svg?path=frontend)](https://david-dm.org/jensim/testinggrounds-ktor?path=frontend&type=dev)
+[![Known Vulnerabilities](https://snyk.io//test/github/healthweb/healthweb/badge.svg?targetFile=frontend/package.json)](https://snyk.io//test/github/healthweb/healthweb?targetFile=frontend/package.json)
 
 ----
 Backend
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=se.jensim.testinggrounds%3Atestinggrounds-ktor&metric=alert_status)](https://sonarcloud.io/dashboard?id=se.jensim.testinggrounds%3Atestinggrounds-ktor)
-[![Backend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=se.jensim.testinggrounds%3Atestinggrounds-ktor&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=se.jensim.testinggrounds%3Atestinggrounds-ktor)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.github.healthweb%3Ahealthweb-parent&metric=coverage)](https://sonarcloud.io/dashboard?id=com.github.healthweb%3Ahealthweb-parent)
+[![Known Vulnerabilities](https://snyk.io//test/github/healthweb/healthweb/badge.svg?targetFile=server/pom.xml)](https://snyk.io//test/github/healthweb/healthweb?targetFile=server/pom.xml)
 
 ----
