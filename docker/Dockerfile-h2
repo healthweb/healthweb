@@ -1,0 +1,6 @@
+FROM java:8
+WORKDIR /
+ADD server/target/fat.jar Server.jar
+ADD https://repository.sonatype.org/service/local/artifact/maven/content?r=central-proxy&g=com.h2database&a=h2&e=jar&v=LATEST h2-driver.jar
+EXPOSE 8080
+CMD java -cp *.jar
