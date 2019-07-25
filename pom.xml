@@ -10,6 +10,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Dropwizard healthweb parent</name>
 
+    <description>
+        A general webserver that keeps track of all of your other webservers
+        (that have a dropwizard healthcheck endpoint)
+    </description>
+    <url>https://github.com/healthweb/healthweb</url>
+
     <modules>
         <module>shared</module>
         <module>frontend</module>
@@ -30,7 +36,36 @@
         <kmongo.version>3.10.1</kmongo.version>
         <hamcrest.version>2.1</hamcrest.version>
         <exposed.version>0.16.2</exposed.version>
+
+        <sonar.exclusions>pom.xml</sonar.exclusions>
+        <sonar.includedModules>server</sonar.includedModules>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>jensim</name>
+            <url>https://github.com/jensim</url>
+        </developer>
+    </developers>
+    <organization>
+        <name>com.github.healthweb</name>
+        <url>https://github.com/healthweb</url>
+    </organization>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/healthweb/healthweb</url>
+    </issueManagement>
+    <scm>
+        <url>https://github.com/healthweb/healthweb</url>
+        <connection>scm:git:git://github.com:healthweb/healthweb.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:healthweb/healthweb.git</developerConnection>
+    </scm>
 
     <build>
         <pluginManagement>
@@ -70,6 +105,25 @@
                              <phase>package</phase>
                              <goals>
                                  <goal>single</goal>
+                             </goals>
+                         </execution>
+                     </executions>
+                 </plugin>
+                 <plugin>
+                     <groupId>org.jacoco</groupId>
+                     <artifactId>jacoco-maven-plugin</artifactId>
+                     <version>0.8.4</version>
+                     <executions>
+                         <execution>
+                             <goals>
+                                 <goal>prepare-agent</goal>
+                             </goals>
+                         </execution>
+                         <execution>
+                             <id>report</id>
+                             <phase>prepare-package</phase>
+                             <goals>
+                                 <goal>report</goal>
                              </goals>
                          </execution>
                      </executions>
