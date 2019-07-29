@@ -18,7 +18,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withTimeout
 import org.slf4j.LoggerFactory
 
-open class HealthCheckCrawler(private val client: HttpClient, private val ob: ObjectMapper) {
+open class HealthCheckCrawler(private val client: HttpClient, private val ob: ObjectMapper, private val properties: PropertiesConfig) {
 
     companion object {
 
@@ -32,7 +32,7 @@ open class HealthCheckCrawler(private val client: HttpClient, private val ob: Ob
 
                 }
             }
-            HealthCheckCrawler(client, ObjectMapperConfig.config())
+            HealthCheckCrawler(client, ObjectMapperConfig.config(), PropertiesConfig.singleton)
         }
     }
 
@@ -41,7 +41,7 @@ open class HealthCheckCrawler(private val client: HttpClient, private val ob: Ob
 
     open suspend fun crawlAsync(endpoint: String): Deferred<HealthChecks> = GlobalScope.async(Dispatchers.IO) {
         try {
-            withTimeout(PropertiesConfig.probeTimeout()) {
+            withTimeout(properties.probeTimeout) {
                 log.debug("Crawling $endpoint")
                 val resp: HttpResponse = client.get(endpoint)
                 val respText = resp.readText()

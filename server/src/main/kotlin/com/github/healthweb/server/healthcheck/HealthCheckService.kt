@@ -23,7 +23,8 @@ import kotlin.math.max
 
 class HealthCheckService(
         private val crawler: HealthCheckCrawler,
-        private val webSocketService: WebSocketService
+        private val webSocketService: WebSocketService,
+        private val properties: PropertiesConfig
 ) {
 
     companion object {
@@ -33,7 +34,8 @@ class HealthCheckService(
         val singleton by lazy {
             HealthCheckService(
                     HealthCheckCrawler.singleton,
-                    WebSocketService.singleton
+                    WebSocketService.singleton,
+                    PropertiesConfig.singleton
             )
         }
     }
@@ -43,7 +45,7 @@ class HealthCheckService(
 
     private fun filtered() = transaction {
         val time = System.currentTimeMillis()
-        val regularProbeCutOf = time - PropertiesConfig.probeTimeIntervalMilli()
+        val regularProbeCutOf = time - properties.probeTimeIntervalMilli
         HealthCheckEndpointDao.find {
             HealthCheckEndpointTable.lastProbeTime.isNull() or
                     (HealthCheckEndpointTable.probeIntervalOverride.isNull() and (HealthCheckEndpointTable.lastProbeTime less regularProbeCutOf)) or

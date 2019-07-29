@@ -10,6 +10,10 @@
     <description>Dropwizard healthweb server</description>
     <packaging>jar</packaging>
 
+    <properties>
+        <mainClass>com.github.healthweb.server.Server</mainClass>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.healthweb</groupId>
@@ -171,7 +175,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.healthweb.server.Server</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                         </manifest>
                     </archive>
                     <finalName>fat</finalName>

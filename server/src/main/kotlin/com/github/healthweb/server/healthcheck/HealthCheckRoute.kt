@@ -17,7 +17,7 @@ fun Route.healthcheck() {
     service.launchCrawler()
     route("/health") {
         get("/") {
-            call.respond("OK")
+            call.respond("OK foo")
         }
         post("/") {
             val hc = call.receive(HealthCheckEndpoint::class)

@@ -14,7 +14,7 @@ fun Route.root() {
         // healthcheck()
     }
     static("/") {
-        staticRootFolder = if (PropertiesConfig.isProd()) {
+        staticRootFolder = if (PropertiesConfig.singleton.isProd) {
             File("/frontend") // Docker assumed path
         } else {
             // Assume dev mode

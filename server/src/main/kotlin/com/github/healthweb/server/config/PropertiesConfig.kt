@@ -3,19 +3,23 @@ package com.github.healthweb.server.config
 import com.typesafe.config.ConfigFactory
 import io.ktor.config.HoconApplicationConfig
 
-object PropertiesConfig {
+class PropertiesConfig {
 
-    private val conf = HoconApplicationConfig(ConfigFactory.load())
+    companion object {
+        val singleton = PropertiesConfig()
+    }
 
-    fun isProd(): Boolean = PropertiesConfig::class.java
-            .protectionDomain?.codeSource?.location?.file?.endsWith(".jar") == true
+    private val conf by lazy { HoconApplicationConfig(ConfigFactory.load()) }
 
-    fun dbUrl(): String = conf.config("db").property("url").getString()
-    fun dbDriver(): String = conf.config("db").property("driver").getString()
-    fun dbUser(): String = conf.config("db").property("user").getString()
-    fun dbPassword(): String = conf.config("db").property("password").getString()
-    fun dbCreateTables(): Boolean = conf.config("db").property("create_tables").getString().toLowerCase() == "true"
+    val port by lazy { conf.config("ktor.deployment").property("port").getString().toInt() }
+    val isProd: Boolean by lazy { PropertiesConfig::class.java.protectionDomain?.codeSource?.location?.file?.endsWith(".jar") == true }
 
-    fun probeTimeIntervalMilli(): Long = conf.config("probe").property("interval_sec").getString().toLong().times(1_000)
-    fun probeTimeout(): Long = conf.config("probe").property("timeout").getString().toLong()
+    val dbUrl: String by lazy { conf.config("db").property("url").getString() }
+    val dbDriver: String by lazy { conf.config("db").property("driver").getString() }
+    val dbUser: String by lazy { conf.config("db").property("user").getString() }
+    val dbPassword: String by lazy { conf.config("db").property("password").getString() }
+    val dbCreateTables: Boolean by lazy { conf.config("db").property("create_tables").getString().toLowerCase() == "true" }
+
+    val probeTimeIntervalMilli: Long by lazy { conf.config("probe").property("interval_sec").getString().toLong().times(1_000) }
+    val probeTimeout: Long by lazy { conf.config("probe").property("timeout").getString().toLong() }
 }

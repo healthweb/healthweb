@@ -6,22 +6,26 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 
-object DatabaseConfig {
+class DatabaseConfig(private val properties: PropertiesConfig) {
+
+    companion object {
+        val singleton = DatabaseConfig(PropertiesConfig.singleton)
+    }
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     val db: Database by lazy {
-        Database.connect(PropertiesConfig.dbUrl(),
-                driver = PropertiesConfig.dbDriver(),
-                user = PropertiesConfig.dbUser(),
-                password = PropertiesConfig.dbPassword())
+        Database.connect(properties.dbUrl,
+                driver = properties.dbDriver,
+                user = properties.dbUser,
+                password = properties.dbPassword)
     }
 
     fun init() {
         db.run {
             log.debug("Connected to database.")
         }
-        if (PropertiesConfig.dbCreateTables()) {
+        if (properties.dbCreateTables) {
             log.debug("Creating tables")
             transaction {
                 SchemaUtils.create(HealthCheckEndpointTable)

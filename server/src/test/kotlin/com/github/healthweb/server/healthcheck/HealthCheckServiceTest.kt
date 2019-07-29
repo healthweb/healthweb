@@ -1,6 +1,7 @@
 package com.github.healthweb.server.healthcheck
 
 import com.github.healthweb.server.config.DatabaseConfig
+import com.github.healthweb.server.config.PropertiesConfig
 import com.github.healthweb.server.websockets.WebSocketService
 import com.github.healthweb.shared.HealthCheck
 import com.github.healthweb.shared.HealthCheckEndpoint
@@ -31,12 +32,12 @@ class HealthCheckServiceTest {
     @Test
     fun crawlAllTest() {
         //given
-        DatabaseConfig.init()
+        DatabaseConfig.singleton.init()
         val mockCrawler: HealthCheckCrawler = mock {
             onBlocking { crawlAsync(endpoint.url) } doReturn GlobalScope.async { answer }
         }
         val mockWebSocket: WebSocketService = mock()
-        val service = HealthCheckService(mockCrawler, mockWebSocket)
+        val service = HealthCheckService(mockCrawler, mockWebSocket, PropertiesConfig.singleton)
         transaction {
             assertThat(HealthCheckEndpointDao.count(), equalTo(0))
             HealthCheckEndpointDao.new {
