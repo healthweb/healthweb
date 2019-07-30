@@ -7,25 +7,54 @@ import {HealthCheckEndpoint} from '../../../shared/healthweb-shared'
   providedIn: 'root'
 })
 export class HealthCheckService implements OnDestroy {
-  wsp = new WebSocketAsPromised(`ws://${window.location.hostname}:${window.location.port}/health`);
+
+  wsp: WebSocketAsPromised;
 
   constructor() {
-    (async () =>{
-      try {
-        await this.wsp.open();
-        this.wsp.send('message');
-        this.wsp.onMessage.addListener(msg => {
-          let hc: HealthCheckEndpoint = JSON.parse(msg);
-          console.log(hc.url);
-        });
-      } catch (e) {
-        console.error(e);
-      }
+    let wsUrl = `${window.location.hostname}:${window.location.port}/health`;
+    if (location.protocol == 'https:') {
+      this.wsp = new WebSocketAsPromised(`wss://${wsUrl}`);
+    } else {
+      this.wsp = new WebSocketAsPromised(`ws://${wsUrl}`);
+    }
+    (async () => {
+      this.connectWS()
     })()
   }
 
+  private async connectWS() {
+    try {
+      if (this.wsp) {
+        await this.wsp.close();
+      }
+    } catch (e) {
+      console.error("WebSockets close failed", e);
+    }
+    try {
+      await this.wsp.open();
+      console.info("WebSockets connect success");
+    } catch (e) {
+      console.error("WebSockets connect failed", e);
+      setTimeout(() => {
+        console.info("WebSockets reconnecting");
+        this.connectWS();
+      }, 15_000)
+    }
+    this.wsp.onMessage.addListener(msg => {
+      let hc: HealthCheckEndpoint = JSON.parse(msg);
+      console.log(hc.url);
+    });
+    this.wsp.onClose.addListener(() => {
+      console.warn("WebSockets disconnected");
+      setTimeout(() => {
+        console.info("WebSockets reconnecting");
+        this.connectWS();
+      }, 5_000)
+    });
+  }
+
   ngOnDestroy(): void {
-    console.log("Destroying healthcheck service");
+    console.info("Destroying healthcheck service");
     (async () => {
       await this.wsp.close();
     })();

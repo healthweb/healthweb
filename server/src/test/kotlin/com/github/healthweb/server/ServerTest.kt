@@ -27,6 +27,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
+@ExperimentalStdlibApi
 class ServerTest {
 
     private val logger = LoggerFactory.getLogger(this::class.java)

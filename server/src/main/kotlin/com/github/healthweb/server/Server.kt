@@ -13,6 +13,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.slf4j.LoggerFactory
 
+@ExperimentalStdlibApi
 fun main(args: Array<String>) {
 
     val conf = PropertiesConfig.singleton
@@ -21,6 +22,7 @@ fun main(args: Array<String>) {
             module = Application::mainModule).start(wait = true)
 }
 
+@ExperimentalStdlibApi
 fun Application.mainModule() {
     DatabaseConfig.singleton.init()
     install()

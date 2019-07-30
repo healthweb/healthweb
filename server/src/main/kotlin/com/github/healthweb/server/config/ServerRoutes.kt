@@ -10,6 +10,7 @@ import io.ktor.routing.route
 import org.slf4j.LoggerFactory
 import java.io.File
 
+@ExperimentalStdlibApi
 fun Route.root() {
     val log = LoggerFactory.getLogger("route:/")
     route("api") {

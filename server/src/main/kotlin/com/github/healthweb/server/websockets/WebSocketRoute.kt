@@ -1,14 +1,15 @@
 package com.github.healthweb.server.websockets
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.healthweb.server.config.ObjectMapperConfig
 import io.ktor.http.cio.websocket.CloseReason
+import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.close
 import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.websocket.webSocket
 import org.slf4j.LoggerFactory
-import com.github.healthweb.server.config.ObjectMapperConfig
 import java.util.concurrent.ConcurrentHashMap
 
 open class WebSocketService(private val objectMapper: ObjectMapper) {
@@ -36,10 +37,11 @@ open class WebSocketService(private val objectMapper: ObjectMapper) {
     }
 }
 
+@ExperimentalStdlibApi
 fun <T : Any> Route.createBroadcastPath(path: String, type: Class<T>) {
     val singleton = WebSocketService.singleton
     val server = singleton.getServer(type)
-    val log = LoggerFactory.getLogger(WebSocketService::class.java)
+    val log = LoggerFactory.getLogger("ws:/$path")
 
     webSocket(path) {
         val session: AppSession? = call.sessions.get()
@@ -50,7 +52,11 @@ fun <T : Any> Route.createBroadcastPath(path: String, type: Class<T>) {
         try {
             server.memberJoin(session.id, this)
             for (frame in incoming) {
-                log.warn("Got something I should not [$frame]")
+                if(frame is Text){
+                    log.warn("Got something I should not [TEXT: \"${frame.data.decodeToString()}\"]")
+                }else{
+                    log.warn("Got something I should not [$frame]")
+                }
             }
         } catch (e: Exception) {
             log.error("Horrible exception in websocket connection", e)
