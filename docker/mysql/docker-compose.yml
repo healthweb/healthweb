@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  healthweb:
+    build:
+      context: ../..
+      dockerfile: docker/mysql/Dockerfile
+    environment:
+      DB_URL: jdbc:mysql://db/test
+      DB_DRIVER: com.mysql.cj.jdbc.Driver
+      DB_USER: root
+      DB_PASSWORD: password
+    depends_on:
+      - db
+    networks:
+      - foo
+      - bar
+    ports:
+      - 8080:8080
+
+  db:
+    image: mysql:8.0.17
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - foo
+    volumes:
+      - ./init.sql:/data/application/init.sql
+
+networks:
+  foo:
+    internal: true
+  bar:
+    external: true
