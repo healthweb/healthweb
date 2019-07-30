@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  healthweb:
+    build:
+      context: ../..
+      dockerfile: docker/h2/Dockerfile
+    networks:
+      - foo
+    ports:
+      - 8080:8080
+
+networks:
+  foo:
+    external: true
