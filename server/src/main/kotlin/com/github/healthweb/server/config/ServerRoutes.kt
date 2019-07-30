@@ -7,9 +7,11 @@ import io.ktor.http.content.static
 import io.ktor.http.content.staticRootFolder
 import io.ktor.routing.Route
 import io.ktor.routing.route
+import org.slf4j.LoggerFactory
 import java.io.File
 
 fun Route.root() {
+    val log = LoggerFactory.getLogger("route:/")
     route("api") {
         // healthcheck()
     }
@@ -18,7 +20,9 @@ fun Route.root() {
             File("/frontend") // Docker assumed path
         } else {
             // Assume dev mode
-            File("../frontend/dist")
+            File("frontend/dist").also {
+                log.info("Serving static files from ${it.absolutePath}")
+            }
         }
         files(".")
         default("index.html")
