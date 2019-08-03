@@ -1,62 +1,22 @@
-import {Injectable, OnDestroy} from '@angular/core';
-// @ts-ignore
-import WebSocketAsPromised from 'websocket-as-promised';
+import {Injectable} from '@angular/core';
 import {HealthCheckEndpoint} from '../../../shared/healthweb-shared'
+import {AbstractWebsocketModule} from "../../modules/abstract/abstract-websocket/abstract-websocket.module";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
-export class HealthCheckService implements OnDestroy {
+export class HealthCheckService extends AbstractWebsocketModule<HealthCheckEndpoint> {
 
-  wsp: WebSocketAsPromised;
-
-  constructor() {
-    let wsUrl = `${window.location.hostname}:${window.location.port}/health`;
-    if (location.protocol == 'https:') {
-      this.wsp = new WebSocketAsPromised(`wss://${wsUrl}`);
-    } else {
-      this.wsp = new WebSocketAsPromised(`ws://${wsUrl}`);
-    }
-    (async () => {
-      this.connectWS()
-    })()
+  constructor(private http: HttpClient) {
+    super("/health", (hc: HealthCheckEndpoint) => hc._id.toString());
   }
 
-  private async connectWS() {
-    try {
-      if (this.wsp) {
-        await this.wsp.close();
-      }
-    } catch (e) {
-      console.error("WebSockets close failed", e);
-    }
-    try {
-      await this.wsp.open();
-      console.info("WebSockets connect success");
-    } catch (e) {
-      console.error("WebSockets connect failed", e);
-      setTimeout(() => {
-        console.info("WebSockets reconnecting");
-        this.connectWS();
-      }, 15_000)
-    }
-    this.wsp.onMessage.addListener(msg => {
-      let hc: HealthCheckEndpoint = JSON.parse(msg);
-      console.log(hc.url);
-    });
-    this.wsp.onClose.addListener(() => {
-      console.warn("WebSockets disconnected");
-      setTimeout(() => {
-        console.info("WebSockets reconnecting");
-        this.connectWS();
-      }, 5_000)
-    });
-  }
-
-  ngOnDestroy(): void {
-    console.info("Destroying healthcheck service");
-    (async () => {
-      await this.wsp.close();
-    })();
+  saveNew(url: string): Observable<HealthCheckEndpoint> {
+    console.info(`saving new host with url ${url}`);//TODO
+    return this.http.post("/health", {url: url})
+      .pipe(map((hc: HealthCheckEndpoint) => hc))
   }
 }

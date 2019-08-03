@@ -1,0 +1,13 @@
+<p>
+  dashboard-page works!
+</p>
+<h1>{{getDashboard()?.name}}</h1>
+<h2 *ngIf="getDashboard()?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
+<h2>{{getDashboard()?.description}}</h2>
+<input [(ngModel)]="newHosts">
+<button (click)="saveHost()">Save new endpoints</button>
+
+<ng-container *ngFor="let hc of getDashboard()?.healthchecks">
+  <app-health-check [id]="hc"></app-health-check>
+</ng-container>
+

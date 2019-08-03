@@ -52,8 +52,9 @@ class BroadcastServer(private val objectMapper: ObjectMapper) {
         if (members.isEmpty()) {
             log.debug("Noone to send to =(")
         }
+        val dataAsString = objectMapper.writeValueAsString(data)
         members.values.forEach { socket ->
-            socket.send(Frame.Text(objectMapper.writeValueAsString(data)))
+            socket.send(Frame.Text(dataAsString))
         }
     }
 

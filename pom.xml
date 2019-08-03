@@ -27,7 +27,7 @@
         <mongo-java-driver.version>3.10.2</mongo-java-driver.version>
         <kotlinx-coroutines-core.version>1.2.2</kotlinx-coroutines-core.version>
         <mockito-kotlin.version>2.1.0</mockito-kotlin.version>
-        <j2ts.version>0.1.0</j2ts.version>
+        <ts-generator.version>1.1.1</ts-generator.version>
 
         <ktor.version>1.2.2</ktor.version>
         <jackson.version>2.9.8</jackson.version>
@@ -39,6 +39,7 @@
 
         <sonar.exclusions>pom.xml</sonar.exclusions>
         <sonar.includedModules>server</sonar.includedModules>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <licenses>

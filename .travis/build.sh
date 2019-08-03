@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-mvn install -B -s .travis/maven_settings.xml
+mvn install -B -e -s .travis/maven_settings.xml

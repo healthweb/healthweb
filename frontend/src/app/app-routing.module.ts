@@ -1,15 +1,23 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HealthCheckComponent} from "./healthcheck/component/health-check.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import {DashboardListComponent} from "./dashboard/dashboard-list/dashboard-list.component";
+import {DashboardPageComponent} from "./dashboard/dashboard-page/dashboard-page.component";
 
 const routes: Routes = [
     {
       path: '',
-      component: HealthCheckComponent,
+      component: DashboardListComponent,
       pathMatch: 'full'
     },
-    {path: '**', component: PageNotFoundComponent}
+    {
+      path: 'dashboard/:dashboardId',
+      component: DashboardPageComponent,
+    },
+    {
+      path: '**',
+      component: PageNotFoundComponent,
+    }
   ]
 ;
 

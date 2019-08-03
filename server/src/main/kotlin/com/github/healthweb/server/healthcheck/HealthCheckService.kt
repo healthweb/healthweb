@@ -60,6 +60,8 @@ class HealthCheckService(
                 val waiting = filtered()
                         .map { mapNewResult(it) }
                 waiting.forEach { update(it.first, it.second.await()) }
+            }else{
+                log.warn("Prevented concurrent crawl")
             }
         } catch (e: Exception) {
             log.error("A terribad accident occured!", e)

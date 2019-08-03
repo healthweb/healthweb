@@ -1,5 +1,6 @@
 package com.github.healthweb.server.config
 
+import com.github.healthweb.server.dashboard.dashboard
 import com.github.healthweb.server.healthcheck.healthcheck
 import io.ktor.http.content.default
 import io.ktor.http.content.files
@@ -29,4 +30,5 @@ fun Route.root() {
         default("index.html")
     }
     healthcheck()
+    dashboard()
 }

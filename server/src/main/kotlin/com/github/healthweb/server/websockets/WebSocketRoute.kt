@@ -5,6 +5,7 @@ import com.github.healthweb.server.config.ObjectMapperConfig
 import io.ktor.http.cio.websocket.CloseReason
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.close
+import io.ktor.http.cio.websocket.send
 import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
@@ -38,12 +39,13 @@ open class WebSocketService(private val objectMapper: ObjectMapper) {
 }
 
 @ExperimentalStdlibApi
-fun <T : Any> Route.createBroadcastPath(path: String, type: Class<T>) {
+fun <T : Any> Route.createBroadcastPath(path: String, type: Class<T>, joinPump: () -> Iterable<T>) {
     val singleton = WebSocketService.singleton
     val server = singleton.getServer(type)
-    val log = LoggerFactory.getLogger("ws:/$path")
+    val objectMapper = ObjectMapperConfig.config()
 
     webSocket(path) {
+        val log = LoggerFactory.getLogger("ws:/${children.joinToString("/")}/$path")
         val session: AppSession? = call.sessions.get()
         if (session == null) {
             close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
@@ -51,6 +53,9 @@ fun <T : Any> Route.createBroadcastPath(path: String, type: Class<T>) {
         }
         try {
             server.memberJoin(session.id, this)
+            joinPump().forEach {
+                send(objectMapper.writeValueAsString(it))
+            }
             for (frame in incoming) {
                 if(frame is Text){
                     log.warn("Got something I should not [TEXT: \"${frame.data.decodeToString()}\"]")

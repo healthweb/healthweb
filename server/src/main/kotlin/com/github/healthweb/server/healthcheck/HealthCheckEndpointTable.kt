@@ -6,6 +6,7 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.LongIdTable
+import org.jetbrains.exposed.sql.Table
 
 object HealthCheckEndpointTable : LongIdTable("HEALTH_CHECK_ENDPOINTS") {
     val url = varchar("url", 512).uniqueIndex()
@@ -25,21 +26,9 @@ class HealthCheckEndpointDao(id: EntityID<Long>) : LongEntity(id) {
     var lastProbeTime by HealthCheckEndpointTable.lastProbeTime
     var lastProblemTime by HealthCheckEndpointTable.lastProblemTime
     var probeIntervalOverride by HealthCheckEndpointTable.probeIntervalOverride
-
-    val tags: List<String> get() = emptyList() // TODO
-    // TODO: val tags by TagsDao referrersOn TagsTable.endpoint
 }
 
-object TagsTable : LongIdTable("TAGS") {
-    val endpoint = reference("endpoint", HealthCheckEndpointTable)
-    val tag = varchar("tag", 256)
+object TagsTable : Table("TAGS") {
+    val endpoint = reference("endpoint", HealthCheckEndpointTable.url).primaryKey(0)
+    val tag = varchar("tag", 256).primaryKey(1)
 }
-
-class TagsDao(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<HealthCheckEndpointDao>(HealthCheckEndpointTable)
-
-    var endpoint by HealthCheckEndpointDao referencedOn TagsTable.endpoint
-    var tag by TagsTable.tag
-}
-
-
