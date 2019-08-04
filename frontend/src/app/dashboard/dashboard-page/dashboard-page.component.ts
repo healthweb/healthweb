@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {DashboardService} from "../dashboard-service/dashboard.service";
 import {ActivatedRoute} from "@angular/router";
-import {Dashboard, HealthCheckEndpoint} from "../../../shared/healthweb-shared";
+import {Dashboard} from "../../../shared/healthweb-shared";
 import {HealthCheckService} from "../../healthcheck/service/health-check.service";
 
 @Component({
@@ -28,15 +28,15 @@ export class DashboardPageComponent {
     return this.dashboardService.keyedData.get(this.dashboardId.toString())
   }
 
-  saveHost() {
-    this.healthService.saveNew(this.newHosts).subscribe((hc: HealthCheckEndpoint) => {
-      this.dashboardService.link(this.dashboardId,hc._id).subscribe(()=>{
-        console.info("Linked host to dashboard");
-      }, (err) => {
-        console.error("Failed linking host to dashboard", err);
-      })
-    }, (err) => {
-      console.error("Failed adding new healthcheck", err);
-    });
+  async saveHost() {
+    let hc = this.healthService.keyedData[this.newHosts];
+    try {
+      if (!hc) {
+        hc = await this.healthService.saveNew(this.newHosts).toPromise()
+      }
+      await this.dashboardService.link(this.dashboardId, hc._id)
+    } catch (e) {
+      console.warn("Failed adding/linking new url", e)
+    }
   }
 }

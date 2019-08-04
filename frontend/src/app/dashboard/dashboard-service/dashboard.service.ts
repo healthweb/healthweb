@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Dashboard} from '../../../shared/healthweb-shared'
 import {AbstractWebsocketModule} from "../../modules/abstract/abstract-websocket/abstract-websocket.module";
-import {Observable} from "rxjs";
 import {map} from 'rxjs/operators';
 
 @Injectable({
@@ -12,24 +11,31 @@ export class DashboardService extends AbstractWebsocketModule <Dashboard> {
 
   constructor(private http: HttpClient) {
     super("/dashboard", (d: Dashboard) => d.id.toString())
+
   }
 
-  public add(dashboard: Dashboard): Observable<Dashboard> {
+  public async add(dashboard: Dashboard): Promise<Dashboard> {
     console.info("Adding new sashboard");
-    return this.http.post("/dashboard", dashboard).pipe(
+    return await this.http.post("/dashboard", dashboard).pipe(
       map((resp: Dashboard) => resp),
-    )
+    ).toPromise()
   }
 
-  public archive(id: Number): Observable<Object> {
-    return this.http.delete(`/dashboard/${id}`)
+  public async archive(id: Number): Promise<any> {
+    return await this.http.delete(`/dashboard/${id}`).toPromise()
   }
 
-  public link(dashboardId: Number, healthCheckId: Number):Observable<Object> {
-    return this.http.put(`/dashboard/healthcheck/${dashboardId}/${healthCheckId}`, null)
+  public async link(dashboardId: Number, healthCheckId: Number): Promise<any> {
+    return await this.http.post(`/dashboard/link`, {
+      'dashboardId': `${dashboardId}`,
+      'healthCheckId': `${healthCheckId}`,
+    }).toPromise()
   }
 
-  public unLink(dashboardId: Number, healthCheckId: Number): Observable<Object> {
-    return this.http.delete(`/dashboard/healthcheck/${dashboardId}/${healthCheckId}`)
+  public async unLink(dashboardId: Number, healthCheckId: Number): Promise<any> {
+    return await this.http.post(`/dashboard/unlink`, {
+      'dashboardId': `${dashboardId}`,
+      'healthCheckId': `${healthCheckId}`,
+    }).toPromise()
   }
 }

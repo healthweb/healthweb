@@ -16,7 +16,7 @@ export class HealthCheckService extends AbstractWebsocketModule<HealthCheckEndpo
 
   saveNew(url: string): Observable<HealthCheckEndpoint> {
     console.info(`saving new host with url ${url}`);//TODO
-    return this.http.post("/health", {url: url})
+    return this.http.post("/health", {'url': `'${url}'`})
       .pipe(map((hc: HealthCheckEndpoint) => hc))
   }
 }

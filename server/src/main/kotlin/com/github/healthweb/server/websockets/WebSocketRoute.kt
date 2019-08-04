@@ -13,6 +13,7 @@ import io.ktor.websocket.webSocket
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
+@ExperimentalStdlibApi
 open class WebSocketService(private val objectMapper: ObjectMapper) {
 
     companion object {

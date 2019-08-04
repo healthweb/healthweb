@@ -24,11 +24,14 @@ fun HealthCheckEndpointDao.toDto() = HealthCheckEndpoint(
 
 fun HealthCheckEndpointDao.toJson(om: ObjectMapper? = null) = toDto().toJson(om)
 
+/**
+ * Needs a transaction to run
+ */
 fun DashboardDao.toDto() = Dashboard(
         id = id.value,
         name = name,
         description = description,
-        //healthchecks = healthchecks.map { it.id.value },
+        healthchecks = healthchecks.map { it.id.value },
         archived = archived
 )
 

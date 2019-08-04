@@ -1,9 +1,13 @@
 package com.github.healthweb.server
 
+import com.github.healthweb.server.config.ObjectMapperConfig
+import com.github.healthweb.shared.Dashboard
+import com.github.healthweb.shared.HealthCheckEndpoint
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import io.ktor.application.Application
 import io.ktor.http.ContentType
@@ -25,16 +29,18 @@ import org.slf4j.LoggerFactory
 import java.util.ArrayList
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.fail
 
 @ExperimentalStdlibApi
 class ServerTest {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
+    private val objectMapper = ObjectMapperConfig.config()
 
     @Rule
     @JvmField
-    val wireMockRule = WireMockRule()
+    val wireMockRule = WireMockRule(wireMockConfig().port(8089))
 
     @Before
     fun setUp() {
@@ -67,14 +73,37 @@ class ServerTest {
         withTestApplication(Application::mainModule) {
             val wsResponse = ArrayList<String>()
             handleWebSocketConversation("/health", {}, { i, _ ->
-                handleRequest(HttpMethod.Post, "/health") {
+
+                val dashboard = handleRequest(HttpMethod.Post, "/dashboard") {
+                    addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                    setBody("""
+                        {"name": "Hejkon",
+                        "description": "Bejkon"}
+                    """.trimIndent())
+                }.let {
+                    assertEquals(200, it.response.status()?.value)
+                    assertNotNull(it.response.content)
+                    objectMapper.readValue(it.response.content, Dashboard::class.java)
+                }
+                val hc = handleRequest(HttpMethod.Post, "/health") {
                     addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     setBody("{\"url\": \"$hcUrl\"}")
+                }.let {
+                    assertEquals(200, it.response.status()?.value)
+                    assertThat(it.response.content, containsString(hcUrl))
+                    assertThat(it.response.content, containsString("\"status\" : \"UNVERIFIED\""))
+                    objectMapper.readValue(it.response.content, HealthCheckEndpoint::class.java)
+                }
+                handleRequest(HttpMethod.Post, "/dashboard/link") {
+                    addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                    setBody("""
+                        {"dashboardId": ${dashboard.id},
+                        "healthCheckId": ${hc._id}}
+                    """.trimIndent())
                 }.apply {
                     assertEquals(200, response.status()?.value)
-                    assertThat(response.content, containsString(hcUrl))
-                    assertThat(response.content, containsString("\"status\" : \"UNVERIFIED\""))
                 }
+
                 try {
                     withTimeout(5000) {
                         for (r in i) {

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 
+@ExperimentalStdlibApi
 class HealthCheckService(
         private val crawler: HealthCheckCrawler,
         private val webSocketService: WebSocketService,
@@ -133,8 +134,13 @@ class HealthCheckService(
     }
 
     fun saveNew(hc: HealthCheckEndpoint): HealthCheckEndpoint = transaction {
-        HealthCheckEndpointDao.new {
-            url = hc.url
-        }
-    }.toDto()
+        val existing = HealthCheckEndpointDao.find { HealthCheckEndpointTable.url.eq(hc.url) }
+        if(existing.count() == 0){
+            HealthCheckEndpointDao.new {
+                url = hc.url
+            }
+        }else{
+            existing.first()
+        }.toDto()
+    }
 }

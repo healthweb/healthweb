@@ -17,6 +17,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThat
 import kotlin.test.Test
 
+@ExperimentalStdlibApi
 class HealthCheckServiceTest {
 
     private val endpoint = HealthCheckEndpoint.fromUrl("http://localhost:8080/health")

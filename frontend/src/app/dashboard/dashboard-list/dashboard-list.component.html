@@ -1,11 +1,11 @@
 <h1>Add new!</h1>
-<p>
-  Name: <input [(ngModel)]="addName">
-  Description: <input [(ngModel)]="addDescription">
-  <button mat-stroked-button color="accent" (click)="saveNew()" [disabled]="addButtonDisabled">Save</button>
-</p>
+<form>
+  <label id="name">Name:</label> <input [(ngModel)]="addName">
+  <label id="description">Description:</label> <input [(ngModel)]="addDescription">
+  <button mat-raised-button color="primary" (click)="saveNew()" [disabled]="addButtonDisabled">Save</button>
+</form>
 <ul>
   <li *ngFor="let d of dashboardService.data">
-    <a [routerLink]="['/dashboard', d.id]">{{d.name}} ({{d.healthchecks.length}}) : {{d.description}}</a>
+    <button mat-stroked-button [routerLink]="['/dashboard', d.id]">{{d.name}} ({{d.healthchecks.length}}) : {{d.description}}</button>
   </li>
 </ul>

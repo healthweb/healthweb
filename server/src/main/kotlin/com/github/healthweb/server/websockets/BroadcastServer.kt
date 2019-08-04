@@ -3,7 +3,7 @@ package com.github.healthweb.server.websockets
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.http.cio.websocket.CloseReason
-import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.WebSocketSession
 import io.ktor.http.cio.websocket.close
 import kotlinx.coroutines.channels.ClosedSendChannelException
@@ -15,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Class in charge of the logic of the chat server.
  * It contains handlers to events and commands to send messages to specific users in the server.
  */
+@ExperimentalStdlibApi
 class BroadcastServer(private val objectMapper: ObjectMapper) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -54,15 +55,17 @@ class BroadcastServer(private val objectMapper: ObjectMapper) {
         }
         val dataAsString = objectMapper.writeValueAsString(data)
         members.values.forEach { socket ->
-            socket.send(Frame.Text(dataAsString))
+            socket.send(Text(dataAsString))
         }
     }
 
     /**
      * Sends a [message] to a list of [this] [WebSocketSession].
      */
-    suspend fun List<WebSocketSession>.send(frame: Frame) {
-        log.debug("sending $frame to $size sockets")
+    suspend fun List<WebSocketSession>.send(frame: Text) {
+        if(log.isDebugEnabled){
+            log.debug("sending ${frame.data.decodeToString()} to $size sockets")
+        }
         forEach {
             try {
                 it.send(frame.copy())

@@ -1,5 +1,6 @@
 package com.github.healthweb.server.dashboard
 
+import com.github.healthweb.server.healthcheck.HealthCheckEndpointDao
 import com.github.healthweb.server.healthcheck.HealthCheckEndpointTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.LongEntity
@@ -19,7 +20,7 @@ class DashboardDao(id: EntityID<Long>) : LongEntity(id) {
     var name by DashboardTable.name
     var description by DashboardTable.description
     var archived by DashboardTable.archived
-    //var healthchecks by HealthCheckEndpointDao via HealthcheckDashboardTable
+    var healthchecks by HealthCheckEndpointDao via HealthcheckDashboardTable
 }
 
 object HealthcheckDashboardTable: Table("HEALTHCHECK_DASHBOARD") {

@@ -11,11 +11,13 @@ class MavenOutPutTest {
 
     @Test
     fun testOutput() {
-        val rootClasses = setOf(Dashboard::class,
+        val rootClasses = setOf(
+                Dashboard::class,
                 HealthCheck::class,
                 HealthCheckEndpoint::class,
                 HealthCheckError::class,
                 HealthChecks::class,
+                Link::class,
                 ServiceStatus::class
         )
         val ts = TypeScriptGenerator(rootClasses = rootClasses, voidType = UNDEFINED).individualDefinitions
