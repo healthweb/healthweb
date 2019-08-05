@@ -5,9 +5,7 @@
 <h2 *ngIf="getDashboard()?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
 <h2>{{getDashboard()?.description}}</h2>
 <input [(ngModel)]="newHosts">
-<button (click)="saveHost()">Save new endpoints</button>
+<button mat-raised-button (click)="saveHost()">Save new endpoints</button>
+<a mat-raised-button [routerLink]="['./settings']">Settings</a>
 
-<ng-container *ngFor="let hc of getDashboard()?.healthchecks">
-  <app-health-check [id]="hc"></app-health-check>
-</ng-container>
-
+<app-health-check *ngFor="let hc of getDashboard()?.healthchecks" [id]="hc"></app-health-check>

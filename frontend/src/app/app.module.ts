@@ -11,6 +11,8 @@ import {MaterialModule} from "./modules/material-module/material.module";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import {DashboardSettingsComponent} from './dashboard/dashboard-settings/dashboard-settings.component';
+import {HealthcheckPageComponent} from './healthcheck/healthcheck-page/healthcheck-page.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import {FormsModule} from "@angular/forms";
     PageNotFoundComponent,
     DashboardListComponent,
     DashboardPageComponent,
+    DashboardSettingsComponent,
+    HealthcheckPageComponent,
   ],
   imports: [
     BrowserModule,

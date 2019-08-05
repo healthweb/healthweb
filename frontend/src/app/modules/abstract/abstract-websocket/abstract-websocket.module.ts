@@ -23,7 +23,7 @@ export abstract class AbstractWebsocketModule<T> implements OnDestroy {
       this.wsp = new WebSocketAsPromised(`ws://${wsUrl}`);
     }
     this.wsp.onMessage.addListener(msg => {
-      console.info(`We got datas ${msg}`)//TODO
+      // console.info(`We got datas ${msg}`)
       let hc: T = JSON.parse(msg);
       this.keyedData.set(this.key(hc), hc);
       this.data = Array.from(this.keyedData.values());
@@ -38,6 +38,10 @@ export abstract class AbstractWebsocketModule<T> implements OnDestroy {
     (async () => {
       this.connectWS()
     })()
+  }
+
+  get(id:string):T{
+    return this.keyedData.get(id);
   }
 
   isHealthy(): boolean {

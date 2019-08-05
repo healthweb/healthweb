@@ -13,7 +13,9 @@ export class DashboardListComponent implements OnInit {
   public addName: string = "";
   public addDescription: string = "";
 
-  constructor(private dashboardService: DashboardService, private router: Router) {
+  constructor(
+    private dashboardService: DashboardService,
+    private router: Router,) {
   }
 
   ngOnInit() {
