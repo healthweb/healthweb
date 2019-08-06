@@ -1,11 +1,12 @@
-<p>
-  dashboard-page works!
-</p>
-<h1>{{getDashboard()?.name}}</h1>
-<h2 *ngIf="getDashboard()?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
-<h2>{{getDashboard()?.description}}</h2>
-<input [(ngModel)]="newHosts">
-<button mat-raised-button (click)="saveHost()">Save new endpoints</button>
-<a mat-raised-button [routerLink]="['./settings']">Settings</a>
+<ng-template [ngIf]="getDashboard() != null" [ngIfElse]="unfound">
+  <h1 >{{getDashboard()?.name}}</h1>
+  <h2 *ngIf="getDashboard()?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
+  <h2>{{getDashboard()?.description}}</h2>
+  <a mat-raised-button [routerLink]="['./settings']">Settings</a>
 
-<app-health-check *ngFor="let hc of getDashboard()?.healthchecks" [id]="hc"></app-health-check>
+  <app-health-check *ngFor="let hc of getDashboard()?.healthchecks" [id]="hc"></app-health-check>
+</ng-template>
+<ng-template #unfound>
+  Unable to find dashboard.
+  <a mat-raised-button color="warn" routerLink="/">Take me Home</a>
+</ng-template>

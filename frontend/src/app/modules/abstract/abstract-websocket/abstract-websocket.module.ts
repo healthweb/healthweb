@@ -2,6 +2,7 @@ import {NgModule, OnDestroy} from '@angular/core';
 import {CommonModule} from '@angular/common';
 // @ts-ignore
 import WebSocketAsPromised from "websocket-as-promised";
+import {HttpClient} from "@angular/common/http";
 
 @NgModule({
   declarations: [],
@@ -9,13 +10,14 @@ import WebSocketAsPromised from "websocket-as-promised";
     CommonModule
   ]
 })
-export abstract class AbstractWebsocketModule<T> implements OnDestroy {
+export abstract class AbstractWebsocketModule<K, T> implements OnDestroy {
 
   private readonly wsp: WebSocketAsPromised;
-  keyedData: Map<string, T> = new Map<string, T>();
-  data: T[] = [];
 
-  protected constructor(private path: string, private key: (T) => string) {
+  public readonly keyedData: Map<K, T> = new Map<K, T>();
+  public readonly data: T[] = [];
+
+  protected constructor(private path: string, private key: (T) => K, protected http: HttpClient) {
     let wsUrl = `${window.location.hostname}:${window.location.port}${path}`;
     if (location.protocol == 'https:') {
       this.wsp = new WebSocketAsPromised(`wss://${wsUrl}`);
@@ -23,32 +25,41 @@ export abstract class AbstractWebsocketModule<T> implements OnDestroy {
       this.wsp = new WebSocketAsPromised(`ws://${wsUrl}`);
     }
     this.wsp.onMessage.addListener(msg => {
-      // console.info(`We got datas ${msg}`)
-      let hc: T = JSON.parse(msg);
-      this.keyedData.set(this.key(hc), hc);
-      this.data = Array.from(this.keyedData.values());
+      //console.debug(`GOT MESSAGE! ${path}`);
+      let t: T = JSON.parse(msg);
+      let k: K = this.key(t);
+      let isOld: boolean = this.keyedData.has(k);
+      this.keyedData.set(k, t);
+      if (isOld) {
+        this.data.splice(0, this.data.length);
+      }
+      this.data.push.apply(this.data, Array.from(this.keyedData.values()));
     });
     this.wsp.onClose.addListener(() => {
       console.warn("WebSockets disconnected");
       setTimeout(() => {
         console.info("WebSockets reconnecting");
-        this.connectWS();
+        this.connectWsAsync();
       }, 5_000)
     });
-    (async () => {
-      this.connectWS()
-    })()
-  }
-
-  get(id:string):T{
-    return this.keyedData.get(id);
+    this.connectWsAsync();
   }
 
   isHealthy(): boolean {
     return this.wsp.isOpened;
   }
 
-  private async connectWS() {
+  private async fetchAllAsync(): Promise<void> {
+    this.http.get<T[]>(this.path)
+      .forEach((all: T[]) => {
+        this.data.splice(0, this.data.length);
+        this.data.push.apply(this.data, all);
+        all.forEach((t: T) => this.keyedData.set(this.key(t), t));
+      });
+  }
+
+  private async connectWsAsync(): Promise<void> {
+    console.debug(`Connecting to websocket path ${this.path}`);
     try {
       if (this.wsp) {
         await this.wsp.close();
@@ -58,9 +69,8 @@ export abstract class AbstractWebsocketModule<T> implements OnDestroy {
     }
     try {
       await this.wsp.open();
-      this.data = [];
-      this.keyedData.clear();
       console.info("WebSockets connect success");
+      await this.fetchAllAsync();
     } catch (e) {
       console.error("WebSockets connect failed", e);
     }

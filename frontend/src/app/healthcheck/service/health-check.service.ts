@@ -7,10 +7,10 @@ import {map} from "rxjs/operators";
 @Injectable({
   providedIn: 'root'
 })
-export class HealthCheckService extends AbstractWebsocketModule<HealthCheckEndpoint> {
+export class HealthCheckService extends AbstractWebsocketModule<number, HealthCheckEndpoint> {
 
-  constructor(private http: HttpClient) {
-    super("/health", (hc: HealthCheckEndpoint) => hc._id.toString());
+  constructor(http: HttpClient) {
+    super("/health", (hc: HealthCheckEndpoint) => hc._id, http);
   }
 
   async saveNew(url: string): Promise<HealthCheckEndpoint> {
@@ -19,7 +19,7 @@ export class HealthCheckService extends AbstractWebsocketModule<HealthCheckEndpo
       .pipe(map((hc: HealthCheckEndpoint) => hc)).toPromise()
   }
 
-  getAll(): HealthCheckEndpoint[] {
-    return Array.from(this.keyedData.values());
+  getForUrl(url:string):HealthCheckEndpoint{
+    return this.data.filter((h) => h.url == url)[0];
   }
 }

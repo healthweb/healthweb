@@ -18,10 +18,11 @@ class DashboardService {
         private val log = LoggerFactory.getLogger(DashboardService::class.java)
     }
 
-    fun getAll(): List<Dashboard> {
+    fun getAllAsync(): Deferred<List<Dashboard>> = GlobalScope.async(IO) {
         log.debug("Get all dashboards")
-        return transaction { DashboardDao.all().toList() }
-                .map { it.toDto() }
+        transaction {
+            DashboardDao.all().map { it.toDto() }
+        }
     }
 
     fun saveAsync(dashboard: Dashboard): Deferred<Dashboard> = GlobalScope.async(IO) {

@@ -1,3 +1,6 @@
-<p>
-  <a [routerLink]="['/healthcheck', id]">{{getHealthcheck()?.url}}</a>
-</p>
+<ng-template [ngIf]="getHealthcheck() != null" [ngIfElse]="unfound">
+  <a mat-raised-button [routerLink]="['/healthcheck', id]">{{getHealthcheck()?.url}}</a>
+</ng-template>
+<ng-template #unfound>
+  <a mat-raised-button color="warn">Unfindable healthcheck with id {{id}}</a>
+</ng-template>

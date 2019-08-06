@@ -8,8 +8,10 @@ import com.github.healthweb.shared.HealthCheckEndpoint
 import com.github.healthweb.shared.HealthChecks
 import com.github.healthweb.shared.ServiceStatus
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
@@ -117,7 +119,7 @@ class HealthCheckService(
                 val start = System.currentTimeMillis()
                 try {
                     withTimeout(timeMillis) {
-                        log.debug("Starting probe")
+                        log.trace("Starting probe")
                         crawlAll()
                     }
                 } catch (e: TimeoutCancellationException) {
@@ -127,10 +129,14 @@ class HealthCheckService(
                 }
                 val spent = System.currentTimeMillis() - start
                 val left = timeMillis - spent
-                log.debug("Probe done, will sleep for $left")
+                log.trace("Probe done, will sleep for $left")
                 delay(max(0, left))
             }
         }
+    }
+
+    fun getAllAsync(): Deferred<List<HealthCheckEndpoint>> = GlobalScope.async(IO){
+        transaction { HealthCheckEndpointDao.all().map { it.toDto() } }
     }
 
     fun saveNew(hc: HealthCheckEndpoint): HealthCheckEndpoint = transaction {

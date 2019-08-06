@@ -15,7 +15,6 @@ export class HealthCheckComponent {
   }
 
   getHealthcheck(): HealthCheckEndpoint {
-    return this.service.keyedData.get(this.id.toString())
+    return this.service.keyedData.get(this.id)
   }
-
 }

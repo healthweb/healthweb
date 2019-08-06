@@ -1,6 +1,5 @@
 package com.github.healthweb.server.healthcheck
 
-import com.github.healthweb.server.extensions.toDto
 import com.github.healthweb.server.healthcheck.mock.healthcheckMock
 import com.github.healthweb.server.websockets.WebSocketService
 import com.github.healthweb.server.websockets.createBroadcastPath
@@ -12,7 +11,6 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import org.jetbrains.exposed.sql.transactions.transaction
 
 @ExperimentalStdlibApi
 fun Route.healthcheck() {
@@ -20,7 +18,8 @@ fun Route.healthcheck() {
     service.launchCrawler()
     route("/health") {
         get("/") {
-            call.respond("OK")
+            val all = service.getAllAsync().await()
+            call.respond(all)
         }
         post("/") {
             val hc = call.receive(HealthCheckEndpoint::class)
@@ -29,8 +28,6 @@ fun Route.healthcheck() {
             WebSocketService.singleton.broadcast(saved)
         }
         healthcheckMock()
-        createBroadcastPath("", HealthCheckEndpoint::class.java) {
-            transaction { HealthCheckEndpointDao.all().map { it.toDto() } }
-        }
+        createBroadcastPath("", HealthCheckEndpoint::class.java)
     }
 }

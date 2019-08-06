@@ -1,7 +1,15 @@
-<h1 *ngIf="dashboardId">{{getDashboard()?.name}}</h1>
-<p>
-  dashboard-settings works!
-</p>
-<p>
-  TODO: Im here to set the selected endpoints for the dashboard, and other dashboard settings, like renaming and redescribing
-</p>
+<ng-template [ngIf]="getDashboard() != null" [ngIfElse]="unfound">
+  <h1>{{getDashboard()?.name}}</h1>
+  <h2 *ngIf="getDashboard()?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
+  <h2>{{getDashboard()?.description}}</h2>
+  <input [(ngModel)]="newHosts">
+  <button mat-raised-button (click)="saveHost()">Save new endpoints</button>
+
+  <p>
+    TODO: Im here to set the selected endpoints for the dashboard, and other dashboard settings, like renaming and redescribing
+  </p>
+</ng-template>
+<ng-template #unfound>
+  Unable to find dashboard.
+  <a mat-raised-button color="warn" routerLink="/">Take me Home</a>
+</ng-template>

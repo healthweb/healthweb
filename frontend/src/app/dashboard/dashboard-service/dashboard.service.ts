@@ -7,11 +7,10 @@ import {map} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService extends AbstractWebsocketModule <Dashboard> {
+export class DashboardService extends AbstractWebsocketModule <number, Dashboard> {
 
-  constructor(private http: HttpClient) {
-    super("/dashboard", (d: Dashboard) => d.id.toString())
-
+  constructor(http: HttpClient) {
+    super("/dashboard", (d: Dashboard) => d.id, http)
   }
 
   public async add(dashboard: Dashboard): Promise<Dashboard> {

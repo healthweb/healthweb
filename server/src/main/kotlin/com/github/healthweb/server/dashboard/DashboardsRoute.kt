@@ -1,6 +1,5 @@
 package com.github.healthweb.server.dashboard
 
-import com.github.healthweb.server.extensions.toDto
 import com.github.healthweb.server.websockets.WebSocketService
 import com.github.healthweb.server.websockets.createBroadcastPath
 import com.github.healthweb.shared.Dashboard
@@ -11,9 +10,9 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
+import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 
 @ExperimentalStdlibApi
@@ -23,6 +22,11 @@ fun Route.dashboard() {
 
     route("/dashboard") {
         val log = LoggerFactory.getLogger("route:/dashboard")
+        get("/"){
+            val all = service.getAllAsync().await()
+            call.respond(all)
+            log.info("All contained: $all")
+        }
         post("/") {
             val dashboard: Dashboard = call.receive(Dashboard::class)
             val saved: Dashboard = service.saveAsync(dashboard).await()
@@ -48,9 +52,6 @@ fun Route.dashboard() {
             call.respond(OK)
             ws.broadcast(updated)
         }
-        createBroadcastPath("", Dashboard::class.java) {
-            log.info("Pumping initial dashboards")
-            transaction { DashboardDao.all().map { it.toDto() } }
-        }
+        createBroadcastPath("", Dashboard::class.java)
     }
 }

@@ -13,18 +13,29 @@ const routes: Routes = [
       pathMatch: 'full',
     },
     {
-      path: 'dashboard/:id',
+      path: 'dashboard',
       children: [
         {
-          path: 'settings',
-          component: DashboardSettingsComponent,
+          path: ':id',
+          children: [
+            {
+              path: 'settings',
+              component: DashboardSettingsComponent,
+            },
+            {
+              path: '',
+              component: DashboardPageComponent,
+            },
+          ],
         },
         {
           path: '',
-          component: DashboardPageComponent,
+          redirectTo: '/',
+          pathMatch: 'full',
         },
       ],
     },
+
     {
       path: 'healthcheck/:id',
       component: HealthcheckPageComponent,

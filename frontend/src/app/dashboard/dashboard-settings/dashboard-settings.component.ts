@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DashboardService} from "../dashboard-service/dashboard.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {HealthCheckService} from "../../healthcheck/service/health-check.service";
 import {Dashboard} from "../../../shared/healthweb-shared";
 
@@ -9,27 +9,37 @@ import {Dashboard} from "../../../shared/healthweb-shared";
   templateUrl: './dashboard-settings.component.html',
   styleUrls: ['./dashboard-settings.component.scss']
 })
-export class DashboardSettingsComponent {
+export class DashboardSettingsComponent implements OnInit {
 
   private dashboardId: number;
+  private newHosts: string;
 
   constructor(private dashboardService: DashboardService,
               private route: ActivatedRoute,
               private router: Router,
               private healthService: HealthCheckService) {
-    (async () => {
-      let p = await this.route.params.toPromise();
-      if (dashboardService.keyedData[p.id] == null) {
-        console.warn(`Cant find that dashboard with id=${p.id}`);
-        await router.navigate(["/"]);
-      } else {
-        this.dashboardId = p.id;
-      }
-    })();
+
   }
 
   getDashboard(): Dashboard {
-    return this.dashboardService.keyedData.get(this.dashboardId.toString())
+    return this.dashboardService.keyedData.get(this.dashboardId);
   }
 
+  async saveHost() {
+    let hc = this.healthService.getForUrl(this.newHosts);
+    try {
+      if (!hc) {
+        hc = await this.healthService.saveNew(this.newHosts)
+      }
+      await this.dashboardService.link(+this.dashboardId, hc._id)
+    } catch (e) {
+      console.warn("Failed adding/linking new url", e)
+    }
+  }
+
+  ngOnInit(): void {
+    this.route.params.subscribe((p: Params) => {
+      this.dashboardId = +p["id"];
+    });
+  }
 }
