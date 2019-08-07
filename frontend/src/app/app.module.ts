@@ -13,6 +13,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {DashboardSettingsComponent} from './dashboard/dashboard-settings/dashboard-settings.component';
 import {HealthcheckPageComponent} from './healthcheck/healthcheck-page/healthcheck-page.component';
+import {HealthcheckListComponent} from './healthcheck/healthcheck-list/healthcheck-list.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {HealthcheckPageComponent} from './healthcheck/healthcheck-page/healthche
     DashboardPageComponent,
     DashboardSettingsComponent,
     HealthcheckPageComponent,
+    HealthcheckListComponent,
   ],
   imports: [
     BrowserModule,

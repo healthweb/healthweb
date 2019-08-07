@@ -5,6 +5,7 @@ import {DashboardListComponent} from "./dashboard/dashboard-list/dashboard-list.
 import {DashboardPageComponent} from "./dashboard/dashboard-page/dashboard-page.component";
 import {DashboardSettingsComponent} from "./dashboard/dashboard-settings/dashboard-settings.component";
 import {HealthcheckPageComponent} from "./healthcheck/healthcheck-page/healthcheck-page.component";
+import {HealthcheckListComponent} from "./healthcheck/healthcheck-list/healthcheck-list.component";
 
 const routes: Routes = [
     {
@@ -37,8 +38,18 @@ const routes: Routes = [
     },
 
     {
-      path: 'healthcheck/:id',
-      component: HealthcheckPageComponent,
+      path: 'healthcheck',
+      children: [
+        {
+          path: ':id',
+          component: HealthcheckPageComponent,
+        },
+        {
+          path: '',
+          component:HealthcheckListComponent,
+          pathMatch: 'full',
+        },
+      ],
     },
     {
       path: '**',

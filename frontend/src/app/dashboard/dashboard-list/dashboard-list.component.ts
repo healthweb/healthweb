@@ -9,13 +9,14 @@ import {Router} from "@angular/router";
 })
 export class DashboardListComponent implements OnInit {
 
-  addButtonDisabled = false;
-  public addName: string = "";
-  public addDescription: string = "";
+  private addButtonDisabled = false;
+  private addName: string = "";
+  private addDescription: string = "";
 
-  constructor(
-    private dashboardService: DashboardService,
-    private router: Router,) {
+  private readonly displayedColumns = ['id', 'name', 'watched'];
+
+  constructor(private dashboardService: DashboardService,
+              private router: Router) {
   }
 
   ngOnInit() {

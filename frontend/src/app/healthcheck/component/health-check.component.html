@@ -1,6 +1,10 @@
 <ng-template [ngIf]="getHealthcheck() != null" [ngIfElse]="unfound">
-  <a mat-raised-button [routerLink]="['/healthcheck', id]">{{getHealthcheck()?.url}}</a>
+  <mat-card>
+    <mat-card-title (click)="toHealthcheckPage()">{{getHealthcheck()?.url}}</mat-card-title>
+  </mat-card>
 </ng-template>
 <ng-template #unfound>
-  <a mat-raised-button color="warn">Unfindable healthcheck with id {{id}}</a>
+  <mat-progress-spinner></mat-progress-spinner>
+  Unfindable healthcheck with id {{id}}
+  <a mat-raised-button color="warn" routerLink="/">Take me home</a>
 </ng-template>

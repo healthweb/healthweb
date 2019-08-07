@@ -15,11 +15,11 @@ export class HealthCheckService extends AbstractWebsocketModule<number, HealthCh
 
   async saveNew(url: string): Promise<HealthCheckEndpoint> {
     console.info(`saving new host with url ${url}`);//TODO
-    return await this.http.post("/health", {'url': `'${url}'`})
+    return await this.http.post("/health", {'url': `${url}`})
       .pipe(map((hc: HealthCheckEndpoint) => hc)).toPromise()
   }
 
-  getForUrl(url:string):HealthCheckEndpoint{
+  getForUrl(url: string): HealthCheckEndpoint {
     return this.data.filter((h) => h.url == url)[0];
   }
 }

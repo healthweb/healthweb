@@ -11,7 +11,7 @@ import {HealthCheckEndpoint} from "../../../shared/healthweb-shared";
 })
 export class HealthcheckPageComponent implements OnInit {
 
-  private healthCheckId: number;
+  private id: number;
 
   constructor(private dashboardService: DashboardService,
               private route: ActivatedRoute,
@@ -20,12 +20,12 @@ export class HealthcheckPageComponent implements OnInit {
   }
 
   getHealthCheck(): HealthCheckEndpoint {
-    return this.healthService.keyedData.get(this.healthCheckId)
+    return this.healthService.keyedData.get(this.id)
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((p: Params) => {
-      this.healthCheckId = +p["id"];
+      this.id = +p["id"];
     });
   }
 }

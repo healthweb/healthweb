@@ -20,6 +20,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
+import java.net.URL
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 
@@ -140,6 +141,7 @@ class HealthCheckService(
     }
 
     fun saveNew(hc: HealthCheckEndpoint): HealthCheckEndpoint = transaction {
+        URL(hc.url) // Guard against malformed urls
         val existing = HealthCheckEndpointDao.find { HealthCheckEndpointTable.url.eq(hc.url) }
         if(existing.count() == 0){
             HealthCheckEndpointDao.new {
