@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HealthCheckEndpoint} from '../../../shared/healthweb-shared'
 import {AbstractWebsocketModule} from "../../modules/abstract/abstract-websocket/abstract-websocket.module";
 import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs/operators";
+import {timeout} from "rxjs/operators";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,12 @@ export class HealthCheckService extends AbstractWebsocketModule<number, HealthCh
     super("/health", (hc: HealthCheckEndpoint) => hc._id, http);
   }
 
-  async saveNew(url: string): Promise<HealthCheckEndpoint> {
-    console.info(`saving new host with url ${url}`);//TODO
-    return await this.http.post("/health", {'url': `${url}`})
-      .pipe(map((hc: HealthCheckEndpoint) => hc)).toPromise()
+  public saveNew(url: string): Observable<HealthCheckEndpoint> {
+    let hcs = this.getSnapshotArr().filter(h => h.url === url);
+    return hcs[0] ? of(hcs[0]) : this.postNew(url);
   }
 
-  getForUrl(url: string): HealthCheckEndpoint {
-    return this.data.filter((h) => h.url == url)[0];
+  private postNew(url: string): Observable<HealthCheckEndpoint> {
+    return this.http.post<HealthCheckEndpoint>("/health", {'url': `${url}`}).pipe(timeout(1_000));
   }
 }

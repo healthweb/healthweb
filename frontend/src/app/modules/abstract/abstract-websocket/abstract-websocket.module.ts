@@ -3,6 +3,8 @@ import {CommonModule} from '@angular/common';
 // @ts-ignore
 import WebSocketAsPromised from "websocket-as-promised";
 import {HttpClient} from "@angular/common/http";
+import {BehaviorSubject, Observable} from "rxjs";
+import {filter, flatMap, map} from "rxjs/operators";
 
 @NgModule({
   declarations: [],
@@ -14,8 +16,8 @@ export abstract class AbstractWebsocketModule<K, T> implements OnDestroy {
 
   private readonly wsp: WebSocketAsPromised;
 
-  public readonly keyedData: Map<K, T> = new Map<K, T>();
-  public readonly data: T[] = [];
+  private readonly dataMap: Map<K, T> = new Map<K, T>();
+  private readonly subjectMap: BehaviorSubject<Map<K, T>> = new BehaviorSubject<Map<K, T>>(this.dataMap);
 
   protected constructor(private path: string, private key: (T) => K, protected http: HttpClient) {
     let wsUrl = `${window.location.hostname}:${window.location.port}${path}`;
@@ -28,33 +30,82 @@ export abstract class AbstractWebsocketModule<K, T> implements OnDestroy {
       //console.debug(`GOT MESSAGE! ${path}`);
       let t: T = JSON.parse(msg);
       let k: K = this.key(t);
-      let isOld: boolean = this.keyedData.has(k);
-      this.keyedData.set(k, t);
-      if (isOld) {
-        this.data.splice(0, this.data.length);
-      }
-      this.data.push.apply(this.data, Array.from(this.keyedData.values()));
+      this.publish(k, t);
     });
     this.wsp.onClose.addListener(() => {
       console.warn("WebSockets disconnected");
       setTimeout(() => {
         console.info("WebSockets reconnecting");
-        this.connectWsAsync();
+        (async () => await this.connectWsAsync())();
       }, 5_000)
     });
-    this.connectWsAsync();
+    (async () => await this.connectWsAsync())();
   }
 
-  isHealthy(): boolean {
+  private publish(k: K, t: T) {
+    this.dataMap.set(k, t);
+    this.subjectMap.next(this.dataMap);
+  }
+
+  public getMap(): Observable<Map<K, T>> {
+    return this.subjectMap
+  }
+
+  public getArr(): Observable<T[]> {
+    return this.getMap().pipe(map((m: Map<K, T>) => {
+      return Array.from(m.values())
+    }));
+  }
+
+  public getSnapshotMap(): Map<K, T> {
+    return this.subjectMap.getValue();
+  }
+
+  public getSnapshotArr(): T[] {
+    return Array.from(this.subjectMap.getValue().values());
+  }
+
+  public getById(k: K): Observable<T> {
+    return this.getMap().pipe(map(m => m.get(k)))
+  }
+
+  public getSnapshotById(k: K): T {
+    return this.subjectMap.getValue().get(k)
+  }
+
+  public getByLateId(lateKey: Observable<K>): Observable<T> {
+    return lateKey.pipe(flatMap((k) => this.getMap().pipe(map(m => m.get(k)))));
+  }
+
+  public getByIds(ks: K[]): Observable<T[]> {
+    return this.getMap().pipe(map(m => ks.map(k => m.get(k))))
+  }
+
+  /**
+   * Get all that does NOT have these IDs
+   */
+  public getByIdsInverse(k: K[]): Observable<T[]> {
+    return this.getMap().pipe(map(m => {
+      let keys = Array.from(m.keys()).filter(a => !k.includes(a));
+      return keys.map(key => m.get(key));
+    }));
+  }
+
+  public isHealthy(): boolean {
     return this.wsp.isOpened;
   }
 
+  public filter(predicate: (T) => boolean): Observable<T[]> {
+    return this.getArr().pipe(filter((h) => predicate(h)));
+  }
+
   private async fetchAllAsync(): Promise<void> {
-    this.http.get<T[]>(this.path)
+    await this.http.get<T[]>(this.path)
       .forEach((all: T[]) => {
-        this.data.splice(0, this.data.length);
-        this.data.push.apply(this.data, all);
-        all.forEach((t: T) => this.keyedData.set(this.key(t), t));
+        all.forEach((t: T) => {
+          let k = this.key(t);
+          this.publish(k, t);
+        });
       });
   }
 

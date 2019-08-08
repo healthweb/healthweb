@@ -1,10 +1,10 @@
-<ng-template [ngIf]="getDashboard() != null" [ngIfElse]="unfound">
-  <h1>{{getDashboard()?.name}}</h1>
-  <h2 *ngIf="getDashboard()?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
-  <h2>{{getDashboard()?.description}}</h2>
+<ng-template [ngIf]="(dashboard | async) != null" [ngIfElse]="unfound">
+  <h1>{{(dashboard | async)?.name}}</h1>
+  <h2 *ngIf="(dashboard | async)?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
+  <h2>{{(dashboard | async)?.description}}</h2>
   <a mat-raised-button [routerLink]="['./settings']">Settings</a>
 
-  <table mat-table [dataSource]="getHealthchecks()">
+  <table mat-table [dataSource]="healthChecks | async">
 
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> ID</th>

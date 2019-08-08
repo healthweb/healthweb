@@ -1,5 +1,5 @@
-<ng-template [ngIf]="getHealthCheck() != null" [ngIfElse]="unfound">
-  <h1>{{getHealthCheck()?.url}}</h1>
+<ng-template [ngIf]="(hc | async) != null" [ngIfElse]="unfound">
+  <h1>{{(hc | async)?.url}}</h1>
   <p>
     healthcheck-page works!
     Im here to set healthcheck specific settings, ie override poll interval and poll pause
@@ -7,6 +7,6 @@
 </ng-template>
 <ng-template #unfound>
   <mat-progress-spinner></mat-progress-spinner>
-  Unfindable healthcheck with id {{id}}
+  Unfindable healthcheck with id {{id | async}}
   <a mat-raised-button color="warn" routerLink="/">Take me home</a>
 </ng-template>

@@ -30,9 +30,9 @@ export class DashboardListComponent implements OnInit {
       description: this.addDescription,
       healthchecks: [],
       archived: false
-    });
+    }).toPromise();
     console.info(`Saved new dashboard :: ${JSON.stringify(d, null, '\t')}`);
     this.addButtonDisabled = false;
-    this.router.navigate([`/dashboard/${d.id}`]);
+    await this.router.navigate([`/dashboard/${d.id}`]);
   }
 }

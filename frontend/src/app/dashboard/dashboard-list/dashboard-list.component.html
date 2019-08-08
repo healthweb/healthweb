@@ -3,7 +3,7 @@ Name: <input [(ngModel)]="addName">
 Description: <input [(ngModel)]="addDescription">
 <button mat-raised-button color="primary" (click)="saveNew()" [disabled]="addButtonDisabled">Save</button>
 <hr>
-<table mat-table [dataSource]="dashboardService.data">
+<table mat-table [dataSource]="dashboardService.getArr() | async">
 
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef> ID</th>
@@ -12,7 +12,7 @@ Description: <input [(ngModel)]="addDescription">
 
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Name</th>
-    <td mat-cell *matCellDef="let hc"><a [href]="hc?.url">{{hc?.name}}</a></td>
+    <td mat-cell *matCellDef="let hc"><a [routerLink]="['dashboard',hc?.id]">{{hc?.name}}</a></td>
   </ng-container>
 
   <ng-container matColumnDef="watched">

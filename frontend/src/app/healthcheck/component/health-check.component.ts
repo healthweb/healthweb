@@ -2,6 +2,8 @@ import {Component, Input} from '@angular/core';
 import {HealthCheckService} from "../service/health-check.service";
 import {HealthCheckEndpoint} from "../../../shared/healthweb-shared";
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-health-check',
@@ -11,31 +13,20 @@ import {Router} from "@angular/router";
 export class HealthCheckComponent {
 
   @Input() id: number;
+  private hc: Observable<HealthCheckEndpoint>;
 
   constructor(private service: HealthCheckService, private router: Router) {
+    this.hc = service.getById(this.id)
   }
 
-  getHealthcheck(): HealthCheckEndpoint {
-    return this.service.keyedData.get(this.id)
-  }
-
-  getColor(): string {
-    switch (this.getHealthcheck().status) {
-      case null:
-        return 'warn';
-      case "HEALTHY":
+  private getColor(): Observable<string> {
+    return this.hc.pipe(map(h => {
+      if (h.status === "HEALTHY") {
         return 'primary';
-      case "UNVERIFIED":
+      } else {
         return 'warn';
-      case "UNHEALTHY":
-        return 'warn';
-      case "UNRESPONSIVE":
-        return 'warn';
-      case "UNSTABLE":
-        return 'warn';
-      case "UNKNOWN":
-        return 'warn';
-    }
+      }
+    }));
   }
 
   async toHealthcheckPage(): Promise<void> {

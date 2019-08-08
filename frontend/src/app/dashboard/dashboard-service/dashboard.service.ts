@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Dashboard} from '../../../shared/healthweb-shared'
 import {AbstractWebsocketModule} from "../../modules/abstract/abstract-websocket/abstract-websocket.module";
-import {map} from 'rxjs/operators';
+import {map, timeout} from 'rxjs/operators';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,28 +14,36 @@ export class DashboardService extends AbstractWebsocketModule <number, Dashboard
     super("/dashboard", (d: Dashboard) => d.id, http)
   }
 
-  public async add(dashboard: Dashboard): Promise<Dashboard> {
+  public add(dashboard: Dashboard): Observable<Dashboard> {
     console.info("Adding new sashboard");
-    return await this.http.post("/dashboard", dashboard).pipe(
+    return this.http.post("/dashboard", dashboard).pipe(
+      timeout(1000),
       map((resp: Dashboard) => resp),
-    ).toPromise()
+    )
   }
 
-  public async archive(id: Number): Promise<any> {
-    return await this.http.delete(`/dashboard/${id}`).toPromise()
+  public archive(id: Number): Observable<any> {
+    return this.http.delete(`/dashboard/${id}`).pipe(
+      timeout(1000),
+    );
   }
 
-  public async link(dashboardId: Number, healthCheckId: Number): Promise<any> {
-    return await this.http.post(`/dashboard/link`, {
+  public link(dashboardId: Number, healthCheckId: Number): Observable<any> {
+    console.debug("Linking");
+    return this.http.post(`/dashboard/link`, {
       'dashboardId': `${dashboardId}`,
       'healthCheckId': `${healthCheckId}`,
-    }).toPromise()
+    }).pipe(
+      timeout(1000),
+    );
   }
 
-  public async unLink(dashboardId: Number, healthCheckId: Number): Promise<any> {
-    return await this.http.post(`/dashboard/unlink`, {
+  public unLink(dashboardId: Number, healthCheckId: Number): Observable<any> {
+    return this.http.post(`/dashboard/unlink`, {
       'dashboardId': `${dashboardId}`,
       'healthCheckId': `${healthCheckId}`,
-    }).toPromise()
+    }).pipe(
+      timeout(1000),
+    );
   }
 }
