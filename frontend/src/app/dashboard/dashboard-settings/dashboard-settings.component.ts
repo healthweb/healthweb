@@ -5,6 +5,8 @@ import {HealthCheckService} from "../../healthcheck/service/health-check.service
 import {Dashboard, HealthCheckEndpoint} from "../../../shared/healthweb-shared";
 import {Observable} from "rxjs";
 import {flatMap, map, tap} from "rxjs/operators";
+import {MatBottomSheet} from "@angular/material";
+import {WarningBottomSheetComponent} from "../../component/warning-bottom-sheet/warning-bottom-sheet.component";
 
 @Component({
   selector: 'app-dashboard-settings',
@@ -23,7 +25,8 @@ export class DashboardSettingsComponent {
   constructor(private dashboardService: DashboardService,
               private route: ActivatedRoute,
               private router: Router,
-              private healthService: HealthCheckService) {
+              private healthService: HealthCheckService,
+              private matBottomSheet: MatBottomSheet) {
 
     let id = this.route.params.pipe(
       map(p => +p["id"]),
@@ -34,11 +37,27 @@ export class DashboardSettingsComponent {
   }
 
   private async saveHost(url: string): Promise<void> {
-    let hc = await this.healthService.saveNew(url).toPromise();
-    await this.linkHost(hc._id);
+    try {
+      let hc = await this.healthService.saveNew(url).toPromise();
+      await this.linkHost(hc._id);
+    } catch (e) {
+      this.matBottomSheet.open(WarningBottomSheetComponent, {
+        data: {
+          text: 'Failed saving endpoint, check dev console for more info.'
+        }
+      });
+    }
   }
 
-  private async linkHost(hcId:number):Promise<void>{
-    await this.dashboardService.link(this.id, hcId).toPromise();
+  private async linkHost(hcId: number): Promise<void> {
+    try{
+      await this.dashboardService.link(this.id, hcId).toPromise();
+    } catch (e) {
+      this.matBottomSheet.open(WarningBottomSheetComponent, {
+        data: {
+          text: 'Failed linking endpoint, check dev console for more info.'
+        }
+      });
+    }
   }
 }
