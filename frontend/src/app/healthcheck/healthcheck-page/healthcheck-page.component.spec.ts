@@ -1,6 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {HealthcheckPageComponent} from './healthcheck-page.component';
+import {CommonsTestModule} from "../../modules/commons-test-module";
 
 describe('HealthcheckPageComponent', () => {
   let component: HealthcheckPageComponent;
@@ -8,9 +9,9 @@ describe('HealthcheckPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HealthcheckPageComponent ]
+      imports: [CommonsTestModule],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

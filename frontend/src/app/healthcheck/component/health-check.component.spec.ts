@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { HealthCheckComponent } from './health-check.component';
+import {HealthCheckComponent} from './health-check.component';
+import {CommonsTestModule} from "../../modules/commons-test-module";
 
 describe('HealthCheckComponent', () => {
   let component: HealthCheckComponent;
@@ -8,7 +9,7 @@ describe('HealthCheckComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HealthCheckComponent ]
+      imports: [CommonsTestModule],
     })
     .compileComponents();
   }));

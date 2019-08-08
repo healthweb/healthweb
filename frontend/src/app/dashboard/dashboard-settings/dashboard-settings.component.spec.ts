@@ -1,6 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {DashboardSettingsComponent} from './dashboard-settings.component';
+import {CommonsTestModule} from "../../modules/commons-test-module";
 
 describe('DashboardSettingsComponent', () => {
   let component: DashboardSettingsComponent;
@@ -8,7 +9,7 @@ describe('DashboardSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardSettingsComponent ]
+      imports: [CommonsTestModule],
     })
     .compileComponents();
   }));

@@ -21,6 +21,6 @@ export class HealthcheckPageComponent {
               private healthService: HealthCheckService) {
 
     this.id = this.route.params.pipe(map(p => +p["id"]));
-    this.hc = this.id.pipe(flatMap(id => this.healthService.getById(id)));
+    this.hc = this.route.params.pipe(flatMap(p => this.healthService.getById(+p["id"])));
   }
 }
