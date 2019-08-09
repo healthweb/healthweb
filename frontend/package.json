@@ -8,9 +8,9 @@
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "ng test --code-coverage --watch=false --browsers ChromeHeadless",
     "test:unit:watch": "ng test --watch=true",
-    "test:e2e": "ng e2e",
+    "test:e2e": "ng e2e --webdriver-update=false",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "pretest": "webdriver-manager update --standalone false --gecko false --versions.chrome 2.37"
   },
   "private": true,
   "dependencies": {
