@@ -17,6 +17,9 @@
     <logger name="org.jetbrains.exposed" level="INFO">
         <appender-ref ref="STDOUT"/>
     </logger>
+    <logger name="Exposed" level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </logger>
 
 
     <root level="DEBUG">
