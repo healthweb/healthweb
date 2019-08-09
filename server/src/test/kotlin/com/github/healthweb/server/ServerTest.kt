@@ -66,7 +66,7 @@ class ServerTest {
         wireMockRule.stop()
     }
 
-    @Test(timeout = 10_000)
+    @Test(timeout = 30_000)
     fun testRoutes() {
         logger.info("WireMock server running on port ${wireMockRule.port()}")
         val hcUrl = "http://localhost:${wireMockRule.port()}/healthcheck"
