@@ -64,6 +64,7 @@ class ServerTest {
     @After
     fun tearDown() {
         wireMockRule.stop()
+        logger.debug("Done.")
     }
 
     @Test(timeout = 30_000)
