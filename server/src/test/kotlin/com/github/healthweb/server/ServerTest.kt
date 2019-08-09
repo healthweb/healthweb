@@ -106,7 +106,7 @@ class ServerTest {
                 }
 
                 try {
-                    withTimeout(5000) {
+                    withTimeout(25_000) {
                         for (r in i) {
                             val string = String(r.data)
                             wsResponse.add(string)
