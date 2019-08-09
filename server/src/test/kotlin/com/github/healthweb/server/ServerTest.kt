@@ -30,6 +30,7 @@ import java.util.ArrayList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlin.test.fail
 
 @ExperimentalStdlibApi
@@ -59,6 +60,7 @@ class ServerTest {
                                           }
                             }
                         """.trimIndent())))
+        assertTrue(wireMockRule.isRunning, "WireMock must run.")
     }
 
     @After
