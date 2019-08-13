@@ -1,9 +1,14 @@
 <ng-template [ngIf]="(dashboard | async) != null" [ngIfElse]="unfound">
-  <h1>{{(dashboard | async)?.name}}</h1>
+  <h1><a routerLink="..">{{(dashboard | async)?.name}}</a></h1>
   <h2 *ngIf="(dashboard | async)?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
   <h2>{{(dashboard | async)?.description}}</h2>
-  <input [(ngModel)]="newHosts">
-  <button mat-raised-button (click)="saveHost(newHosts)">Save new endpoints</button>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Favorite food" [(ngModel)]="newHosts" [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
+
+    <button mat-raised-button (click)="saveHost(newHosts)">Save new endpoints</button>
+  </form>
   <p>
     Currently watching {{(dashboard | async).healthchecks.length}} health checks.
   </p>
@@ -30,7 +35,7 @@
 
     <ng-container matColumnDef="add">
       <th mat-header-cell *matHeaderCellDef> Add</th>
-      <td mat-cell *matCellDef="let hc"> <button mat-icon-button color="primary" (click)="linkHost(hc._id)">+</button> </td>
+      <td mat-cell *matCellDef="let hc"> <button mat-button mat-mini-fab color="primary" (click)="linkHost(hc._id)"><b>+</b></button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

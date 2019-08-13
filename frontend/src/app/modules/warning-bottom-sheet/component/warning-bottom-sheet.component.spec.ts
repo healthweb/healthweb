@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {WarningBottomSheetComponent} from './warning-bottom-sheet.component';
-import {CommonsTestModule} from "../../modules/commons-test-module";
+import {CommonsTestModule} from "../../commons-test-module";
 
 describe('WarningBottomSheetComponent', () => {
   let component: WarningBottomSheetComponent;

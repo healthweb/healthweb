@@ -14,7 +14,7 @@ import {DashboardPageComponent} from "../dashboard/dashboard-page/dashboard-page
 import {DashboardSettingsComponent} from "../dashboard/dashboard-settings/dashboard-settings.component";
 import {HealthcheckPageComponent} from "../healthcheck/healthcheck-page/healthcheck-page.component";
 import {HealthcheckListComponent} from "../healthcheck/healthcheck-list/healthcheck-list.component";
-import {WarningBottomSheetComponent} from "../component/warning-bottom-sheet/warning-bottom-sheet.component";
+import {WarningBottomSheetComponent} from "./warning-bottom-sheet/component/warning-bottom-sheet.component";
 import {ActivatedRoute, Params} from "@angular/router";
 import {Subject} from "rxjs";
 

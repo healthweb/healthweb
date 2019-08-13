@@ -15,7 +15,7 @@ import {DashboardSettingsComponent} from './dashboard/dashboard-settings/dashboa
 import {HealthcheckPageComponent} from './healthcheck/healthcheck-page/healthcheck-page.component';
 import {HealthcheckListComponent} from './healthcheck/healthcheck-list/healthcheck-list.component';
 import {MatBottomSheetModule} from "@angular/material";
-import {WarningBottomSheetComponent} from './component/warning-bottom-sheet/warning-bottom-sheet.component';
+import {WarningBottomSheetComponent} from './modules/warning-bottom-sheet/component/warning-bottom-sheet.component';
 
 @NgModule({
   declarations: [
