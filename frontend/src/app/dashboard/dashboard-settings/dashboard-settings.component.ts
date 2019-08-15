@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {HealthCheckService} from "../../healthcheck/service/health-check.service";
 import {Dashboard, HealthCheckEndpoint} from "../../../shared/healthweb-shared";
 import {Observable} from "rxjs";
-import {flatMap, map, tap} from "rxjs/operators";
+import {first, flatMap, map, tap} from "rxjs/operators";
 import {WarningBottomSheetService} from "../../modules/warning-bottom-sheet/service/warning-bottom-sheet.service";
 
 @Component({
@@ -15,6 +15,7 @@ import {WarningBottomSheetService} from "../../modules/warning-bottom-sheet/serv
 export class DashboardSettingsComponent {
 
   private newHosts: string;
+  private dashEdit: Dashboard = {archived: false, description: "", healthchecks: [], id: undefined, name: ""};
   private readonly displayedColumns: string[] = ['id', 'status', 'url', 'add'];
 
   private readonly dashboard: Observable<Dashboard>;
@@ -32,6 +33,10 @@ export class DashboardSettingsComponent {
       tap(i => this.id = i),
     );
     this.dashboard = id.pipe(flatMap(id => this.dashboardService.getById(id)));
+    this.dashboard.pipe(
+      first(d => d != null),
+      tap(d => console.log(`Done ${JSON.stringify(d)}`)),
+    ).subscribe(d => this.dashEdit = d);
     this.unwatchedHealthChecks = this.dashboard.pipe(flatMap((d: Dashboard) => this.healthService.getByIdsInverse(d.healthchecks)));
   }
 

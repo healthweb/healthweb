@@ -27,4 +27,12 @@ export class DashboardPageComponent {
     this.dashboard = this.id.pipe(flatMap(id => this.dashboardService.getById(id)));
     this.healthChecks = this.dashboard.pipe(flatMap(d => this.healthcheckService.getByIds(d.healthchecks)))
   }
+
+  private trunkString(s: string) {
+    if (s && s.length > 50) {
+      return `${s.slice(0, 47)}...`;
+    } else {
+      return s;
+    }
+  }
 }

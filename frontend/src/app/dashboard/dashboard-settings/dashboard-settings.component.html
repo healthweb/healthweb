@@ -1,14 +1,19 @@
 <ng-template [ngIf]="(dashboard | async) != null" [ngIfElse]="unfound">
-  <h1><a routerLink="..">{{(dashboard | async)?.name}}</a></h1>
-  <h2 *ngIf="(dashboard | async)?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
-  <h2>{{(dashboard | async)?.description}}</h2>
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Favorite food" [(ngModel)]="newHosts" [ngModelOptions]="{standalone: true}">
-    </mat-form-field>
+  <a routerLink="..">back...</a>
+  <mat-form-field>
+    <input matInput type="text" placeholder="Name" [(ngModel)]="dashEdit.name" [ngModelOptions]="{standalone: true}">
+  </mat-form-field>
+  <mat-slide-toggle [(ngModel)]="dashEdit.archived" aria-label="Archived?" [ngModelOptions]="{standalone: true}">
+    Archived
+  </mat-slide-toggle>
+  <mat-form-field>
+    <input matInput type="text" placeholder="Description" [(ngModel)]="dashEdit.description" [ngModelOptions]="{standalone: true}">
+  </mat-form-field>
+  <mat-form-field>
+    <input class="example-full-width" matInput type="url" placeholder="Healthcheck endpoint URL" [(ngModel)]="newHosts" [ngModelOptions]="{standalone: true}" width="70">
+  </mat-form-field>
 
-    <button mat-raised-button (click)="saveHost(newHosts)">Save new endpoints</button>
-  </form>
+  <button mat-raised-button (click)="saveHost(newHosts)">Save new endpoints</button>
   <p>
     Currently watching {{(dashboard | async).healthchecks.length}} health checks.
   </p>
@@ -35,7 +40,9 @@
 
     <ng-container matColumnDef="add">
       <th mat-header-cell *matHeaderCellDef> Add</th>
-      <td mat-cell *matCellDef="let hc"> <button mat-button mat-mini-fab color="primary" (click)="linkHost(hc._id)"><b>+</b></button> </td>
+      <td mat-cell *matCellDef="let hc">
+        <button mat-button mat-mini-fab color="primary" (click)="linkHost(hc._id)"><b>+</b></button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -1,8 +1,10 @@
 <ng-template [ngIf]="(dashboard | async) != null" [ngIfElse]="unfound">
-  <h1>{{(dashboard | async)?.name}}</h1>
-  <h2 *ngIf="(dashboard | async)?.archived">This dashboard has been archived, and will be removed sooner or later.</h2>
-  <h2>{{(dashboard | async)?.description}}</h2>
-  <a mat-raised-button [routerLink]="['./settings']">Settings</a>
+  <p>
+    <span class="name">{{(dashboard | async)?.name}}&nbsp;</span>
+    <i *ngIf="(dashboard | async)?.archived"><u>This dashboard has been archived, and will be removed sooner or later.</u></i>
+    <span [matTooltip]="(dashboard | async)?.description" matTooltipPosition="below">&nbsp;&quot;{{trunkString((dashboard | async)?.description)}}&quot;</span>
+    <span class="pull-right"><a mat-raised-button [routerLink]="['./settings']">Settings</a></span>
+  </p>
 
   <table mat-table [dataSource]="healthChecks | async">
 
