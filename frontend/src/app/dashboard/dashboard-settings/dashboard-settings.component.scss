@@ -5,3 +5,11 @@ table {
 .example-full-width {
   width: 100%;
 }
+
+.padded-inner > * {
+  margin: 5px;
+}
+
+.pull-right {
+  float: right;
+}

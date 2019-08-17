@@ -2,7 +2,7 @@ package com.github.healthweb.shared
 
 @ToTypeScript
 data class HealthCheckEndpoint(
-    val _id: Long? = null,
+    val id: Long? = null,
     val url: String,
     val lastResponse: HealthChecks? = null,
     val status: ServiceStatus = ServiceStatus.UNVERIFIED,

@@ -1,8 +1,17 @@
-<h1>Add new!</h1>
-Name: <input [(ngModel)]="addName">
-Description: <input [(ngModel)]="addDescription">
-<button mat-raised-button color="primary" (click)="saveNew()" [disabled]="addButtonDisabled">Save</button>
-<hr>
+<span class="header">Dashboards</span>
+<span class="newForm">
+  <button mat-mini-fab *ngIf="!addFormShow" (click)="addFormShow=true"><b>+</b></button>
+  <ng-container *ngIf="addFormShow">
+    Add new
+    <mat-divider vertical="true">
+    </mat-divider>
+    <mat-form-field>
+      <input #name matInput placeholder="Name">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="saveNew(name.value)" [disabled]="addButtonDisabled">Save</button>
+  </ng-container>
+</span>
+
 <table mat-table [dataSource]="dashboardService.getArr() | async">
 
   <ng-container matColumnDef="id">

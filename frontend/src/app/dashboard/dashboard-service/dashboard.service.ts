@@ -14,18 +14,12 @@ export class DashboardService extends AbstractWebsocketModule <number, Dashboard
     super("/dashboard", (d: Dashboard) => d.id, http)
   }
 
-  public add(dashboard: Dashboard): Observable<Dashboard> {
-    console.info("Adding new sashboard");
+  public save(dashboard: Dashboard): Observable<Dashboard> {
+    console.debug("Saving dashboard");
     return this.http.post("/dashboard", dashboard).pipe(
       timeout(1000),
       map((resp: Dashboard) => resp),
     )
-  }
-
-  public archive(id: Number): Observable<any> {
-    return this.http.delete(`/dashboard/${id}`).pipe(
-      timeout(1000),
-    );
   }
 
   public link(dashboardId: Number, healthCheckId: Number): Observable<any> {

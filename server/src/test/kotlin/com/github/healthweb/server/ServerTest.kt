@@ -101,7 +101,7 @@ class ServerTest {
                     addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     setBody("""
                         {"dashboardId": ${dashboard.id},
-                        "healthCheckId": ${hc._id}}
+                        "healthCheckId": ${hc.id}}
                     """.trimIndent())
                 }.apply {
                     assertEquals(200, response.status()?.value)

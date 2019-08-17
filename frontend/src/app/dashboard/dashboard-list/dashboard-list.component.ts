@@ -10,9 +10,8 @@ import {WarningBottomSheetService} from "../../modules/warning-bottom-sheet/serv
 })
 export class DashboardListComponent implements OnInit {
 
+  private addFormShow = false;
   private addButtonDisabled = false;
-  private addName: string = "";
-  private addDescription: string = "";
 
   private readonly displayedColumns = ['id', 'name', 'watched'];
 
@@ -24,18 +23,19 @@ export class DashboardListComponent implements OnInit {
   ngOnInit() {
   }
 
-  public async saveNew() {
+  public async saveNew(name:string) {
     try {
       this.addButtonDisabled = true;
-      let d = await this.dashboardService.add({
+      let d = await this.dashboardService.save({
         id: null,
-        name: this.addName,
-        description: this.addDescription,
+        name: name,
+        description: null,
         healthchecks: [],
         archived: false
       }).toPromise();
       console.info(`Saved new dashboard :: ${JSON.stringify(d, null, '\t')}`);
       this.addButtonDisabled = false;
+      this.addFormShow = false;
       await this.router.navigate([`/dashboard/${d.id}`]);
     }catch (e) {
       this.warningsService.warning("Failed saving dashboard", e)

@@ -66,7 +66,10 @@ export abstract class AbstractWebsocketModule<K, T> implements OnDestroy {
   }
 
   public getById(k: K): Observable<T> {
-    return this.getMap().pipe(map(m => m.get(k)))
+    return this.getMap().pipe(
+      map(m => m.get(k)),
+      filter(v => v != null),
+    )
   }
 
   public getSnapshotById(k: K): T {
@@ -74,11 +77,14 @@ export abstract class AbstractWebsocketModule<K, T> implements OnDestroy {
   }
 
   public getByLateId(lateKey: Observable<K>): Observable<T> {
-    return lateKey.pipe(flatMap((k) => this.getMap().pipe(map(m => m.get(k)))));
+    return lateKey.pipe(flatMap((k) => this.getMap().pipe(
+      map(m => m.get(k),
+        filter(v => v != null),
+      ))));
   }
 
   public getByIds(ks: K[]): Observable<T[]> {
-    return this.getMap().pipe(map(m => ks.map(k => m.get(k))))
+    return this.getMap().pipe(map(m => ks.map(k => m.get(k)).filter(v => v != null)))
   }
 
   /**

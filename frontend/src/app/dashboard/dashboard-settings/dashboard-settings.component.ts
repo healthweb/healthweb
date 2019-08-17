@@ -32,18 +32,29 @@ export class DashboardSettingsComponent {
       map(p => +p["id"]),
       tap(i => this.id = i),
     );
-    this.dashboard = id.pipe(flatMap(id => this.dashboardService.getById(id)));
+    this.dashboard = id.pipe(
+      flatMap(id => this.dashboardService.getById(id)),
+    );
+    this.unwatchedHealthChecks = this.dashboard.pipe(
+      flatMap((d: Dashboard) => this.healthService.getByIdsInverse(d.healthchecks))
+    );
     this.dashboard.pipe(
       first(d => d != null),
-      tap(d => console.log(`Done ${JSON.stringify(d)}`)),
-    ).subscribe(d => this.dashEdit = d);
-    this.unwatchedHealthChecks = this.dashboard.pipe(flatMap((d: Dashboard) => this.healthService.getByIdsInverse(d.healthchecks)));
+    ).subscribe(d => this.dashEdit = JSON.parse(JSON.stringify(d)));
+  }
+
+  private async save() {
+    try {
+      await this.dashboardService.save(this.dashEdit).toPromise()
+    } catch (e) {
+      this.warningService.warning('Failed saving dashboard.', e);
+    }
   }
 
   private async saveHost(url: string): Promise<void> {
     try {
       let hc = await this.healthService.saveNew(url).toPromise();
-      await this.linkHost(hc._id);
+      await this.linkHost(hc.id);
       this.newHosts = "";
     } catch (e) {
       this.warningService.warning('Failed saving endpoint.', e);

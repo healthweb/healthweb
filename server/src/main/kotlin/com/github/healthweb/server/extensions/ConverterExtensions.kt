@@ -13,7 +13,7 @@ fun HealthChecks.toJson(om: ObjectMapper? = null): String = ObjectMapperConfig.c
 fun String.toHealthChecks(om: ObjectMapper? = null): HealthChecks = ObjectMapperConfig.config(om).readValue(this, HealthChecks::class.java)
 
 fun HealthCheckEndpointDao.toDto() = HealthCheckEndpoint(
-        _id = this.id.value,
+        id = this.id.value,
         url = this.url,
         probeIntervalOverride = this.probeIntervalOverride,
         lastProbeTime = this.lastProbeTime,

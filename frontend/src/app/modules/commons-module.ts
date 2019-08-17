@@ -9,7 +9,7 @@ import {HealthcheckPageComponent} from "../healthcheck/healthcheck-page/healthch
 import {HealthcheckListComponent} from "../healthcheck/healthcheck-list/healthcheck-list.component";
 import {WarningBottomSheetComponent} from "./warning-bottom-sheet/component/warning-bottom-sheet.component";
 import {BrowserModule} from "@angular/platform-browser";
-import {MatBottomSheetModule, MatListModule, MatTooltipModule} from "@angular/material";
+import {MatBadgeModule, MatBottomSheetModule, MatChipsModule, MatListModule, MatTooltipModule} from "@angular/material";
 import {AppRoutingModule} from "../app-routing.module";
 import {MaterialModule} from "./material-module/material.module";
 import {FormsModule} from "@angular/forms";
@@ -33,6 +33,8 @@ let modules: any[] = [
   FormsModule,
   MatListModule,
   MatTooltipModule,
+  MatChipsModule,
+  MatBadgeModule,
 ];
 
 @NgModule({

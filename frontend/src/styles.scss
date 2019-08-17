@@ -8,12 +8,40 @@ html, body {
   height: 100%;
 }
 
+$primary: $mat-blue;
+$accent: $mat-light-green;
+$warn: $mat-red;
+
 $theme: mat-dark-theme(
-    mat-palette($mat-deep-purple),
-    mat-palette($mat-amber));
+    mat-palette($primary),
+    mat-palette($accent),
+    mat-palette($warn));
 
 body {
   @include angular-material-theme($theme);
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-row {
+  $myColor: mat-color(map-get($theme, background), 'card');
+  $redness: 25%;
+  $darkness: 3%;
+  &:nth-child(odd) {
+    $myDarker: darken($myColor, $darkness);
+    &.row_warn {
+      background-color: scale-color($myDarker, $red: $redness);
+    }
+    &:not(.row_warn) {
+      background-color: $myDarker;
+    }
+  }
+  &:nth-child(even) {
+    &.row_warn {
+      background-color: scale-color($myColor, $red: $redness);
+    }
+    &:not(.row_warn) {
+      background-color: $myColor;
+    }
+  }
 }

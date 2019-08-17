@@ -30,7 +30,7 @@ class MavenOutPutTest {
         assertThat(output, containsString("""
             export interface Dashboard {
                 archived: boolean;
-                description: string;
+                description: string | undefined;
                 healthchecks: number[];
                 id: number | undefined;
                 name: string;

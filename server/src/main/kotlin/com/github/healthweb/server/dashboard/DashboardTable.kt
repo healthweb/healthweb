@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.Table
 
 object DashboardTable : LongIdTable("DASHBOARD"){
     val name = varchar("NAME", 250)
-    val description = varchar("DESCRIPTION", 10000)
+    val description = varchar("DESCRIPTION", 10000).nullable()
     val archived = bool("ARCHIVED").default(false)
 }
 

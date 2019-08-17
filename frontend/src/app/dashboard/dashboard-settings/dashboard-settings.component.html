@@ -1,31 +1,33 @@
 <ng-template [ngIf]="(dashboard | async) != null" [ngIfElse]="unfound">
-  <a routerLink="..">back...</a>
-  <mat-form-field>
-    <input matInput type="text" placeholder="Name" [(ngModel)]="dashEdit.name" [ngModelOptions]="{standalone: true}">
-  </mat-form-field>
-  <mat-slide-toggle [(ngModel)]="dashEdit.archived" aria-label="Archived?" [ngModelOptions]="{standalone: true}">
-    Archived
-  </mat-slide-toggle>
-  <mat-form-field>
-    <input matInput type="text" placeholder="Description" [(ngModel)]="dashEdit.description" [ngModelOptions]="{standalone: true}">
-  </mat-form-field>
-  <mat-form-field>
-    <input class="example-full-width" matInput type="url" placeholder="Healthcheck endpoint URL" [(ngModel)]="newHosts" [ngModelOptions]="{standalone: true}" width="70">
-  </mat-form-field>
-
-  <button mat-raised-button (click)="saveHost(newHosts)">Save new endpoints</button>
+  <mat-card class="padded-inner">
+    <a routerLink=".." mat-button mat-mini-fab><b>&larr;</b></a>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Name" [(ngModel)]="dashEdit.name">
+    </mat-form-field>
+    <mat-slide-toggle [(ngModel)]="dashEdit.archived" aria-label="Archived?">
+      Archived
+    </mat-slide-toggle>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Description" [(ngModel)]="dashEdit.description">
+    </mat-form-field>
+    <button mat-button mat-raised-button class="pull-right" (click)="save()">Save</button>
+  </mat-card>
+  <mat-divider></mat-divider>
   <p>
     Currently watching {{(dashboard | async).healthchecks.length}} health checks.
   </p>
-  <p>
-    TODO: Im here to set the selected endpoints for the dashboard, and other dashboard settings, like renaming and redescribing
-  </p>
   <h1>Add new health checks:</h1>
-  <table mat-table [dataSource]="unwatchedHealthChecks | async">
+  <mat-card class="padded-inner">
+    <mat-form-field>
+      <input class="example-full-width" matInput type="url" placeholder="Healthcheck endpoint URL" [(ngModel)]="newHosts" width="70">
+    </mat-form-field>
+    <button mat-raised-button (click)="saveHost(newHosts)" class="pull-right">Save new endpoints</button>
+  </mat-card>
+  <table mat-table [dataSource]="unwatchedHealthChecks | async" *ngIf="(unwatchedHealthChecks | async).length > 0">
 
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> ID</th>
-      <td mat-cell *matCellDef="let hc"> {{hc?._id}} </td>
+      <td mat-cell *matCellDef="let hc"> {{hc?.id}} </td>
     </ng-container>
 
     <ng-container matColumnDef="url">
@@ -41,7 +43,7 @@
     <ng-container matColumnDef="add">
       <th mat-header-cell *matHeaderCellDef> Add</th>
       <td mat-cell *matCellDef="let hc">
-        <button mat-button mat-mini-fab color="primary" (click)="linkHost(hc._id)"><b>+</b></button>
+        <button mat-button mat-mini-fab color="primary" (click)="linkHost(hc.id)"><b>+</b></button>
       </td>
     </ng-container>
 

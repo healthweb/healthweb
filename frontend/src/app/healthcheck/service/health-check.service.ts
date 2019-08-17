@@ -11,7 +11,7 @@ import {Observable, of} from "rxjs";
 export class HealthCheckService extends AbstractWebsocketModule<number, HealthCheckEndpoint> {
 
   constructor(http: HttpClient) {
-    super("/health", (hc: HealthCheckEndpoint) => hc._id, http);
+    super("/health", (hc: HealthCheckEndpoint) => hc.id, http);
   }
 
   public saveNew(url: string): Observable<HealthCheckEndpoint> {
