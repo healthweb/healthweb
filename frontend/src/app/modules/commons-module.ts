@@ -14,6 +14,7 @@ import {
   MatBadgeModule,
   MatBottomSheetModule,
   MatChipsModule,
+  MatDialogModule,
   MatListModule,
   MatTooltipModule
 } from "@angular/material";
@@ -44,6 +45,7 @@ let modules: any[] = [
   MatTooltipModule,
   MatChipsModule,
   MatBadgeModule,
+  MatDialogModule,
 ];
 
 @NgModule({
