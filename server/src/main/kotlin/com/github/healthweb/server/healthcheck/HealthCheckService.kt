@@ -16,7 +16,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withTimeout
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
@@ -85,14 +88,15 @@ class HealthCheckService(
 
     suspend fun update(hc: HealthCheckEndpointDao, newResult: HealthChecks) {
         val currentTimeMillis = System.currentTimeMillis()
-        transaction {
+        val dto = transaction {
             hc.status = status(hc, newResult)
             if (!newResult.isHealthy()) {
                 hc.lastProblemTime = currentTimeMillis
             }
             hc.last_response = newResult.toJson()
+            hc.toDto()
         }
-        webSocketService.broadcast(hc.toDto())
+        webSocketService.broadcast(dto)
     }
 
     private fun status(hc: HealthCheckEndpointDao, newResult: HealthChecks): ServiceStatus =
@@ -150,5 +154,20 @@ class HealthCheckService(
         }else{
             existing.first()
         }.toDto()
+    }
+
+    fun addTag(id:Long, tagg:String)= transaction {
+        EndpointTagsTable.insert {
+            it[endpoint] = EntityID(id, HealthCheckEndpointTable)
+            it[tag] = tagg.toLowerCase()
+        }
+        HealthCheckEndpointDao.findById(id)!!.toDto()
+    }
+
+    fun removeTag(id:Long, tagg:String) = transaction {
+        EndpointTagsTable.deleteWhere(1) {
+            EndpointTagsTable.endpoint.eq(id) and EndpointTagsTable.tag.eq(tagg)
+        }
+        HealthCheckEndpointDao.findById(id)!!.toDto()
     }
 }

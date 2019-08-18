@@ -1,7 +1,7 @@
 <mat-list>
   <ng-container *ngFor="let m of messages | keyvalue; last as last;">
     <mat-list-item>
-      {{m.value.text}}
+      <pre>{{m.value.text}}</pre>
       <a mat-button mat-mini-fab color="accent" (click)="m.value.dismissCallback()"><b>X</b></a>
     </mat-list-item>
     <mat-divider *ngIf="!last"></mat-divider>

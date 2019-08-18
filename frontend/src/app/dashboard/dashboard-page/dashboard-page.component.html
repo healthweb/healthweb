@@ -4,22 +4,22 @@
     <i *ngIf="(dashboard | async)?.archived"><u>This dashboard has been archived, and will be removed sooner or later.</u></i>
     <span *ngIf="(dashboard | async)?.description">&nbsp;&quot;{{trunkString((dashboard | async)?.description)}}&quot;</span>
     <span class="pull-right">
-      <button mat-raised-button>Sort/Filter</button>
+      <button mat-raised-button (click)="toggleHideHealthy()">{{filter.hideHealthy ? 'Show' : 'Hide'}} Healthy</button>
       <button mat-raised-button (click)="deleteSelected()" [disabled]="!anySelected()" color="warn">Delete selected</button>
       <a mat-raised-button [routerLink]="['./settings']">Settings</a>
     </span>
   </p>
 
-  <table mat-table [dataSource]="healthChecks | async">
+  <table mat-table [dataSource]="datasource">
 
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> ID</th>
-      <td mat-cell *matCellDef="let hc"> {{hc?.id}} </td>
+      <td mat-cell *matCellDef="let hc"> <a [routerLink]="['/healthcheck', hc?.id]">{{hc?.id}}</a> </td>
     </ng-container>
 
     <ng-container matColumnDef="url">
       <th mat-header-cell *matHeaderCellDef> URL</th>
-      <td mat-cell *matCellDef="let hc"> <a [href]="hc?.url" target="_blank">{{hc?.url}}</a> </td>
+      <td mat-cell *matCellDef="let hc"><a [href]="hc?.url" target="_blank">{{hc?.url}}</a></td>
     </ng-container>
 
     <ng-container matColumnDef="status">

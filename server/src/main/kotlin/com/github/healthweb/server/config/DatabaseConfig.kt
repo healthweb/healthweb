@@ -2,8 +2,8 @@ package com.github.healthweb.server.config
 
 import com.github.healthweb.server.dashboard.DashboardTable
 import com.github.healthweb.server.dashboard.HealthcheckDashboardTable
+import com.github.healthweb.server.healthcheck.EndpointTagsTable
 import com.github.healthweb.server.healthcheck.HealthCheckEndpointTable
-import com.github.healthweb.server.healthcheck.TagsTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -31,7 +31,7 @@ class DatabaseConfig(private val properties: PropertiesConfig) {
         if (properties.dbCreateTables) {
             log.debug("Creating tables")
             transaction {
-                SchemaUtils.create(HealthCheckEndpointTable, DashboardTable, HealthcheckDashboardTable, TagsTable)
+                SchemaUtils.create(HealthCheckEndpointTable, DashboardTable, HealthcheckDashboardTable, EndpointTagsTable)
             }
         }
     }

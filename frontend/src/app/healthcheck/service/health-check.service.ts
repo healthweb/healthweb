@@ -22,4 +22,12 @@ export class HealthCheckService extends AbstractWebsocketModule<number, HealthCh
   private postNew(url: string): Observable<HealthCheckEndpoint> {
     return this.http.post<HealthCheckEndpoint>("/health", {'url': `${url}`}).pipe(timeout(1_000));
   }
+
+  public tag(id: number, tag: string): Observable<any> {
+    return this.http.post("/health/tag", {id: id, tag: tag}).pipe(timeout(1_000));
+  }
+
+  public untag(id: number, tag: string): Observable<any> {
+    return this.http.post("/health/untag", {id: id, tag: tag}).pipe(timeout(1_000));
+  }
 }

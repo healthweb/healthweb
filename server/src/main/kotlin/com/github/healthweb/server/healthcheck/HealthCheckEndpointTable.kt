@@ -28,7 +28,7 @@ class HealthCheckEndpointDao(id: EntityID<Long>) : LongEntity(id) {
     var probeIntervalOverride by HealthCheckEndpointTable.probeIntervalOverride
 }
 
-object TagsTable : Table("TAGS") {
-    val endpoint = reference("endpoint", HealthCheckEndpointTable.url).primaryKey(0)
+object EndpointTagsTable : Table("ENDPOINT_TAGS") {
+    val endpoint = reference("endpoint", HealthCheckEndpointTable).primaryKey(0)
     val tag = varchar("tag", 256).primaryKey(1)
 }

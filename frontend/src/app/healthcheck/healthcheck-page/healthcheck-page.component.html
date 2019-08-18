@@ -1,9 +1,45 @@
 <ng-template [ngIf]="(hc | async) != null" [ngIfElse]="unfound">
-  <h1>{{(hc | async)?.url}}</h1>
-  <p>
-    healthcheck-page works!
-    Im here to set healthcheck specific settings, ie override poll interval and poll pause
-  </p>
+  <h1>{{(hc | async)?.url}} Status: {{(hc | async)?.status}}</h1>
+  <mat-form-field class="example-chip-list">
+    <mat-chip-list #chipList aria-label="Endpoint tags">
+      <mat-chip *ngFor="let t of (hc |async)?.tags" selectable="false" removable="true" (removed)="remove(t)">
+        {{t}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Tags..."
+             [matChipInputFor]="chipList"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             [matChipInputAddOnBlur]="true"
+             (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  <table mat-table [dataSource]="datasource">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef="let c">{{c?.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="error">
+      <th mat-header-cell *matHeaderCellDef> Error</th>
+      <td mat-cell *matCellDef="let c">
+        <button mat-raised-button color="warn" [disabled]="c?.error == undefined" (click)="showErr(c)">Show errors</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="healthy">
+      <th mat-header-cell *matHeaderCellDef> Healthy</th>
+      <td mat-cell *matCellDef="let c">{{c?.healthy}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef> Message</th>
+      <td mat-cell *matCellDef="let c">{{c?.message}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let hc; columns: displayedColumns;"></tr>
+  </table>
 </ng-template>
 <ng-template #unfound>
   <mat-progress-spinner></mat-progress-spinner>
