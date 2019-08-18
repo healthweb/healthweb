@@ -9,10 +9,18 @@ import {HealthcheckPageComponent} from "../healthcheck/healthcheck-page/healthch
 import {HealthcheckListComponent} from "../healthcheck/healthcheck-list/healthcheck-list.component";
 import {WarningBottomSheetComponent} from "./warning-bottom-sheet/component/warning-bottom-sheet.component";
 import {BrowserModule} from "@angular/platform-browser";
-import {MatBadgeModule, MatBottomSheetModule, MatChipsModule, MatListModule, MatTooltipModule} from "@angular/material";
+import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatChipsModule,
+  MatListModule,
+  MatTooltipModule
+} from "@angular/material";
 import {AppRoutingModule} from "../app-routing.module";
 import {MaterialModule} from "./material-module/material.module";
 import {FormsModule} from "@angular/forms";
+import {DialogComponent} from "../dialog/dialog.component";
 
 let components: any[] = [
   AppComponent,
@@ -24,6 +32,7 @@ let components: any[] = [
   HealthcheckPageComponent,
   HealthcheckListComponent,
   WarningBottomSheetComponent,
+  DialogComponent,
 ];
 let modules: any[] = [
   MatBottomSheetModule,
@@ -40,6 +49,9 @@ let modules: any[] = [
 @NgModule({
   imports: modules,
   declarations: components,
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
+  ],
   exports: modules,
 })
 export class CommonsModule {

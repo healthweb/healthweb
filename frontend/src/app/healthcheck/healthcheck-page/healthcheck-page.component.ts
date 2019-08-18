@@ -6,8 +6,9 @@ import {HealthCheckEndpoint, HealthCheckError, HealthChecks} from "../../../shar
 import {Observable} from "rxjs";
 import {first, flatMap, map} from "rxjs/operators";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
-import {MatChipInputEvent, MatTableDataSource} from "@angular/material";
+import {MatChipInputEvent, MatDialog, MatTableDataSource} from "@angular/material";
 import {WarningBottomSheetService} from "../../modules/warning-bottom-sheet/service/warning-bottom-sheet.service";
+import {DialogComponent} from "../../dialog/dialog.component";
 
 @Component({
   selector: 'app-healthcheck-page',
@@ -26,7 +27,8 @@ export class HealthcheckPageComponent {
   constructor(private dashboardService: DashboardService,
               private route: ActivatedRoute,
               private healthService: HealthCheckService,
-              private warningService: WarningBottomSheetService) {
+              private warningService: WarningBottomSheetService,
+              private dialogService: MatDialog) {
 
     this.id = this.route.params.pipe(map(p => +p["id"]));
     this.hc = this.route.params.pipe(flatMap(p => this.healthService.getById(+p["id"])));
@@ -50,7 +52,7 @@ export class HealthcheckPageComponent {
       if (hc.error.stack) {
         show += '\nStacktrace:\n' + hc.error.stack.join("\n")
       }
-      this.warningService.warning(show, null);
+      this.dialogService.open(DialogComponent, {data: {header: hc.name, text: show}});
     }
   }
 

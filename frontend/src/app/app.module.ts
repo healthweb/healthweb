@@ -4,10 +4,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from "@angular/common/http";
 import {WarningBottomSheetComponent} from './modules/warning-bottom-sheet/component/warning-bottom-sheet.component';
 import {CommonsModule} from "./modules/commons-module";
+import {DialogComponent} from "./dialog/dialog.component";
 
 @NgModule({
   entryComponents: [
     WarningBottomSheetComponent,
+    DialogComponent,
   ],
   imports: [
     HttpClientModule,
@@ -15,7 +17,7 @@ import {CommonsModule} from "./modules/commons-module";
     CommonsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }
